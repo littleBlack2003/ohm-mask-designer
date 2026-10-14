@@ -95,6 +95,12 @@ def prepare(body):
     features = body.get("features")
     if not isinstance(features, list) or len(features) > 80:
         raise m.SpecError("单格图案须为数组，最多80个图案对象")
+    valid_region_roles = {"unassigned", "active", "common"}
+    for feature in features:
+        if not isinstance(feature, dict):
+            raise m.SpecError("图案对象须为JSON对象")
+        if feature.get("region_role", "unassigned") not in valid_region_roles:
+            raise m.SpecError("图案开口区域用途须为 unassigned、active 或 common")
     spec = copy.deepcopy(CURRENT_SPEC)
     project_settings = body.get("project_settings")
     if project_settings is not None:

@@ -11,6 +11,7 @@ from shapely.ops import unary_union
 
 DEFAULTS = dict(distribution='uniform', aperture_mm=.01, ito_mm=0.,
                 registration_x_mm=0., registration_y_mm=0.)
+REGION_ROLES = ('unassigned', 'active', 'common')
 
 
 def settings(value=None):
@@ -100,14 +101,24 @@ def nominal(spec, m):
     foil_tooling = len(m.build_frame_holes(spec['foil']['frame_holes'],body,'foil.frame_holes')) if spec['foil'].get('frame_holes') else 0
     overlap = any(g.intersects(other) for i,g in enumerate(holes) for other in holes[i+1:])
     rows = []
+    role_counts = {role: 0 for role in REGION_ROLES}
     for i, (p,g) in enumerate(zip(apertures,holes)):
+        role = p.get('region_role', 'unassigned')
+        role_counts[role] += 1
         area = (full_area(p) if ito.covers(g) else g.intersection(ito).area) if regions else None
         rows.append(dict(pixel=i+1, source=p['source'], shape=p['type'],
+                         region_role=role, region_index=role_counts[role],
                          opening_mm2=full_area(p), area_mm2=area,
                          area_cm2=None if area is None else area/100))
     return dict(counts=dict(cells=len(centers), cell_openings=len(holes),
                 cell_connected_openings=components(hole_union),
+                cell_active_openings=role_counts['active'],
+                cell_common_openings=role_counts['common'],
+                cell_unassigned_openings=role_counts['unassigned'],
                 foil_pattern_openings=len(holes)*repeats, foil_mounting_holes=foil_tooling,
+                foil_active_openings=role_counts['active']*repeats,
+                foil_common_openings=role_counts['common']*repeats,
+                foil_unassigned_openings=role_counts['unassigned']*repeats,
                 foil_total_openings=len(holes)*repeats+foil_tooling,
                 frame_positioning_openings=len(cuts), frame_mounting_holes=frame_tooling,
                 frame_total_openings=len(cuts)+frame_tooling), pixels=rows,
@@ -245,7 +256,7 @@ def calculate(spec,m,options=None):
         row.update(u_mm2=u,U_mm2=2*u,relative_u_percent=100*u/row['area_mm2'] if row['area_mm2'] else None,
                    formula=formula,warning=model['warning'],status='conservative' if model['warning'] else 'ok')
     result['notes']=[
-        '有效面积=单个图案开口∩ITO区域并集；接触区需自行识别，不加和面积或不确定度。',
+        '区域标记仅区分开口用途，不改变加工轮廓；有效面积=单个图案开口∩ITO区域并集，每个开口的面积和不确定度独立报告，不加和。',
         '公式：u(A)=√[Σ(∂A/∂qᵢ·u(qᵢ))²]，输入误差独立；±公差a按u(q)=a/√3换算，直接输入标准不确定度时不换算。',
         '矩形交集：Lx=max(0,min(x右,xITO右)−max(x左,xITO左))，Ly同理；A=Lx×Ly。按当前裁切关系求解析灵敏度。',
         'w/h为开口完整宽高，d为直径，l为槽总长；W/H为ITO完整宽高，X/Y为相对定位平移。旋转角度固定。',

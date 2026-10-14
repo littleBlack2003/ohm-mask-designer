@@ -53,6 +53,24 @@ class EditorTests(unittest.TestCase):
         self.assertEqual(json.loads(s.DRAFT.read_text(encoding='utf-8'))['foil']['cell'],shapes)
         self.assertNotIn('[错误]',data['report'])
 
+    def test_region_role_is_saved_and_invalid_values_are_rejected(self):
+        shapes=[{'type':'circle','diameter':2,'center':[0,0],'region_role':'active'},
+                {'type':'circle','diameter':2,'center':[4,0],'region_role':'common'},
+                {'type':'circle','diameter':2,'center':[-4,0]}]
+        status,data=self.post('generate',shapes)
+        self.assertEqual(status,200)
+        saved=json.loads(s.DRAFT.read_text(encoding='utf-8'))
+        self.assertEqual(saved['foil']['cell'],shapes)
+        status,data=self.post('validate',shapes)
+        self.assertEqual(status,200)
+        self.assertEqual(data['statistics']['counts']['cell_active_openings'],1)
+        self.assertEqual(data['statistics']['counts']['cell_common_openings'],1)
+        self.assertEqual(data['statistics']['counts']['cell_unassigned_openings'],1)
+        invalid=[{'type':'circle','diameter':2,'region_role':'electrode'}]
+        status,data=self.post('save',invalid)
+        self.assertEqual(status,422)
+        self.assertIn('区域用途',data['error'])
+
     def test_invalid_pattern_stops_dxf(self):
         status,data=self.post('generate',[{'type':'circle','diameter':2,'center':[20,0]}])
         self.assertEqual(status,422);self.assertIn('[错误]',data['report'])

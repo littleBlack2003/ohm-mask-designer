@@ -27,7 +27,7 @@ loader.loader.exec_module(m)
 LOCK = threading.RLock()
 DEFAULT_SOURCE = SOURCE
 LIBRARY = ROOT.parent / '掩模项目'
-APP_VERSION = '0.3.0'
+APP_VERSION = '0.4.0'
 STOP_SERVER = None
 
 def initial():
@@ -178,6 +178,12 @@ def frame_geometry(spec):
 def prepare(features, ito_features=None, markings=None, uncertainty=None, project_settings=None):
     if not isinstance(features,list) or len(features)>80:
         raise m.SpecError('单格图案须为数组，最多80个图案对象')
+    valid_region_roles={'unassigned','active','common'}
+    for feature in features:
+        if not isinstance(feature,dict):
+            raise m.SpecError('图案对象须为JSON对象')
+        if feature.get('region_role','unassigned') not in valid_region_roles:
+            raise m.SpecError('图案开口区域用途须为 unassigned、active 或 common')
     spec = initial()
     if project_settings is not None:
         if not isinstance(project_settings,dict):raise ValueError('项目设置须为对象')

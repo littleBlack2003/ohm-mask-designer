@@ -27,6 +27,18 @@ class AreaTests(unittest.TestCase):
         self.assertNotIn('cell_effective_mm2',r)
         self.assertNotIn('array_effective_mm2',r)
 
+    def test_region_roles_are_counted_and_indexed_independently(self):
+        holes=[rect(1,1,-3),rect(1,1,0),rect(1,1,3),rect(1,1,6)]
+        holes[0]['region_role']='active';holes[1]['region_role']='common'
+        holes[2]['region_role']='active'
+        r=a.nominal(spec(holes,[rect(25,25)]),s.m)
+        self.assertEqual(r['counts']['cell_active_openings'],2)
+        self.assertEqual(r['counts']['cell_common_openings'],1)
+        self.assertEqual(r['counts']['cell_unassigned_openings'],1)
+        self.assertEqual(r['counts']['foil_active_openings'],72)
+        self.assertEqual([(p['region_role'],p['region_index']) for p in r['pixels']],
+                         [('active',1),('common',1),('active',2),('unassigned',1)])
+
     def test_rectangle_uniform_matches_propagation_formula(self):
         w,h,e=3,4,.01
         r=a.calculate(spec([rect(w,h)],[rect(20,20)]),s.m,dict(aperture_mm=e))
