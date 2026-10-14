@@ -27,7 +27,7 @@ loader.loader.exec_module(m)
 LOCK = threading.RLock()
 DEFAULT_SOURCE = SOURCE
 LIBRARY = ROOT.parent / '掩模项目'
-APP_VERSION = '0.6.0'
+APP_VERSION = '0.7.0'
 STOP_SERVER = None
 
 def initial():
@@ -173,7 +173,22 @@ def frame_geometry(spec):
     foil_tooling_base=foil_outline if foil_custom else body
     return {'outline':outline,'foil_outline':foil_outline,'windows':m.merge_window_cuts(windows,picks,seg,.001),'centers':centers,
             'tooling':m.build_frame_holes(sk['frame_holes'],body,'skeleton.frame_holes') if sk.get('frame_holes') else [],
-            'foil_tooling':m.build_frame_holes(foil_spec['frame_holes'],foil_tooling_base,'foil.frame_holes') if foil_spec.get('frame_holes') else []}
+            'foil_tooling':m.build_frame_holes(foil_spec['frame_holes'],foil_tooling_base,'foil.frame_holes') if foil_spec.get('frame_holes') else [],
+            'test_mask':test_mask_geometry(spec)}
+
+def test_mask_geometry(spec):
+    config=spec.get('test_mask') if isinstance(spec.get('test_mask'),dict) else {}
+    outline_spec=(config or {}).get('outline') or spec['substrate']
+    result={'enabled':(config or {}).get('enabled',True) is not False,
+            'outline':m.build_outline(outline_spec,spec.get('arc_segments_per_90',24)),
+            'holes':[],'error':None}
+    try:
+        part,_=manufacturing.build_test_mask(spec,m,area_stats)
+        if part:
+            result.update(outline=part.outline,holes=part.holes)
+    except (ValueError,m.SpecError) as exc:
+        result['error']=str(exc)
+    return result
 
 def prepare(features, ito_features=None, markings=None, uncertainty=None, project_settings=None):
     if not isinstance(features,list) or len(features)>80:
@@ -291,7 +306,7 @@ class Handler(BaseHTTPRequestHandler):
                 report,valid=inspect_cell(spec,shapes)
                 if path=='/api/validate':
                     self.send(200,{'ok':valid,'report':report,'shapes':shapes,'mark_paths':m.marking_preview(spec),
-                                   'statistics':area_stats.nominal(spec,m)});return
+                                   'statistics':area_stats.nominal(spec,m),'frame':frame_geometry(spec)});return
                 if path=='/api/save':
                     with LOCK: save_document(spec)
                     self.send(200,{'ok':True,'valid':valid,'report':report,'path':str(DRAFT)});return

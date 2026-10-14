@@ -43,6 +43,17 @@ class WebBridgeTests(unittest.TestCase):
         self.assertEqual(result['status'],200)
         self.assertIn('默认25mm基底_测试遮光掩模_切割.dxf',result['body']['files'])
 
+    def test_web_validate_returns_test_mask_canvas_geometry(self):
+        body={'features':[{'type':'rect_array','width':2,'height':4,'nx':1,'ny':1,
+                           'pitch_x':0,'pitch_y':0,'origin':[0,1],'region_role':'active'}],
+              'ito_features':[{'type':'rect_array','width':10,'height':2,'nx':1,'ny':1,
+                               'pitch_x':0,'pitch_y':0,'origin':[0,0]}]}
+        result=json.loads(bridge.call('validate',json.dumps(body)))
+        self.assertEqual(result['status'],200)
+        preview=result['body']['frame']['test_mask']
+        self.assertEqual(len(preview['holes']),1)
+        self.assertIsNone(preview['error'])
+
 
 if __name__ == '__main__':
     unittest.main()

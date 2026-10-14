@@ -10,7 +10,7 @@ import make_mask as m
 import manufacturing
 
 
-APP_VERSION = "0.6.0 Web"
+APP_VERSION = "0.7.0 Web"
 CURRENT_SPEC = {}
 
 
@@ -88,7 +88,26 @@ def frame_geometry(spec):
         if skeleton.get("frame_holes") else [],
         "foil_tooling": m.build_frame_holes(foil_spec["frame_holes"], foil_tooling_base, "foil.frame_holes")
         if foil_spec.get("frame_holes") else [],
+        "test_mask": test_mask_geometry(spec),
     }
+
+
+def test_mask_geometry(spec):
+    config = spec.get("test_mask") if isinstance(spec.get("test_mask"), dict) else {}
+    outline_spec = (config or {}).get("outline") or spec["substrate"]
+    result = {
+        "enabled": (config or {}).get("enabled", True) is not False,
+        "outline": m.build_outline(outline_spec, spec.get("arc_segments_per_90", 24)),
+        "holes": [],
+        "error": None,
+    }
+    try:
+        part, _ = manufacturing.build_test_mask(spec, m, area_stats)
+        if part:
+            result.update(outline=part.outline, holes=part.holes)
+    except (ValueError, m.SpecError) as exc:
+        result["error"] = str(exc)
+    return result
 
 
 def prepare(body):
@@ -213,6 +232,7 @@ def _run(action, body):
             "shapes": shapes,
             "mark_paths": m.marking_preview(spec),
             "statistics": area_stats.nominal(spec, m),
+            "frame": frame_geometry(spec),
         }
     if action == "save":
         return {"ok": True, "valid": valid, "report": report, "path": "浏览器本地存储", "_spec": spec}
