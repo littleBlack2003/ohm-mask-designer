@@ -202,5 +202,11 @@
     "ito_mm": 0.0,
     "registration_x_mm": 0.0,
     "registration_y_mm": 0.0
+  },
+  "test_mask": {
+    "enabled": true,
+    "aperture_scale": 0.8,
+    "size_snap_mm": 0.1,
+    "edge_margin_mm": 0.3
   }
 }

@@ -27,7 +27,7 @@ loader.loader.exec_module(m)
 LOCK = threading.RLock()
 DEFAULT_SOURCE = SOURCE
 LIBRARY = ROOT.parent / '掩模项目'
-APP_VERSION = '0.5.0'
+APP_VERSION = '0.6.0'
 STOP_SERVER = None
 
 def initial():

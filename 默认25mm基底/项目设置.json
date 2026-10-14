@@ -183,5 +183,11 @@
         ]
       }
     ]
+  },
+  "test_mask": {
+    "enabled": true,
+    "aperture_scale": 0.8,
+    "size_snap_mm": 0.1,
+    "edge_margin_mm": 0.3
   }
 }

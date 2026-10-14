@@ -125,7 +125,17 @@ ITO有效区域使用与图案开口相同的形状定义, 须在基片真实边
 - 所有孔校验是否落在 `silvered` 内缩 `aperture_inset_mm` 的区域内。
 - 内缩采用到真实边界的最短距离, 保留圆形、圆角与凹多边形边界; 不使用包围盒代替。
 - `silvered` 会作为 `REFERENCE` 参考层画在图上(不切割)。
-- GUI蒸镀总成项目会自动派生测试遮光mask：外形默认复制 `substrate`，通光孔取 `region_role: active` 的图案开口与 `ito_effective` 的交集；`common` 和 `unassigned` 不生成通光孔。
+- GUI蒸镀总成项目会自动派生测试遮光mask：外形默认复制 `substrate`，先取 `region_role: active` 的图案开口与 `ito_effective` 的交集作为活性有效区域，再按 `test_mask.aperture_scale` 缩小边长（默认0.8），并按 `test_mask.size_snap_mm` 吸附宽高（默认0.1 mm）。通光孔必须严格位于活性有效区域内；`common` 和 `unassigned` 不生成通光孔。
+
+GUI项目的 `test_mask` 对象：
+
+| 字段 | 默认 | 说明 |
+|------|------|------|
+| `enabled` | `true` | 是否自动派生测试遮光mask |
+| `aperture_scale` | `0.8` | 通光孔相对活性有效区域的边长比例，必须大于0且小于1 |
+| `size_snap_mm` | `0.1` | 通光孔宽、高的尺寸吸附步长 |
+| `edge_margin_mm` | 项目最小筋宽 | 通光孔到测试mask外框的最小距离 |
+| `outline` | `substrate` | 可选自定义测试mask外形 |
 
 输出 1 个 DXF。
 

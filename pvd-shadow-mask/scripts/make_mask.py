@@ -204,9 +204,12 @@ def validate_spec(value, ctx="spec"):
             if key in ("nx", "ny", "arc_segments_per_90"):
                 if isinstance(item, bool) or not isinstance(item, int) or item <= 0:
                     raise SpecError(f"{path} 必须为正整数")
-            if key in ("width", "height", "diameter", "length", "curve_tolerance_mm"):
+            if key in ("width", "height", "diameter", "length", "curve_tolerance_mm", "size_snap_mm"):
                 if isinstance(item, bool) or not isinstance(item, (int, float)) or item <= 0:
                     raise SpecError(f"{path} 必须 > 0")
+            if key == "aperture_scale":
+                if isinstance(item, bool) or not isinstance(item, (int, float)) or not 0 < item < 1:
+                    raise SpecError(f"{path} 必须大于0且小于1")
             if key in ("corner_radius", "clearance_mm", "min_web_mm", "edge_margin_mm", "aperture_inset_mm"):
                 if isinstance(item, bool) or not isinstance(item, (int, float)) or item < 0:
                     raise SpecError(f"{path} 必须 ≥ 0")

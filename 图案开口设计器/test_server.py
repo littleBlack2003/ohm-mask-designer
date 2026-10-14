@@ -174,8 +174,12 @@ class EditorTests(unittest.TestCase):
         part,report=s.manufacturing.build_test_mask(prepared,s.m,s.area_stats)
         self.assertEqual(s.m.shape_bbox(part.outline),(-12.5,-12.5,12.5,12.5))
         self.assertEqual(len(part.holes),1)
-        self.assertAlmostEqual(s.m.shape_area(part.holes[0]),4,places=6)
+        self.assertAlmostEqual(s.m.shape_area(part.holes[0]),2.56,places=6)
+        for actual,expected in zip(s.m.shape_bbox(part.holes[0]),(-3.8,-.8,-2.2,.8)):
+            self.assertAlmostEqual(actual,expected,places=9)
         self.assertIn('基片/外形  : 25.000 x 25.000 mm',report)
+        self.assertIn('活性有效区域边长的 80.0%',report)
+        self.assertIn('0.100 mm 吸附',report)
         status,data=self.post('generate',holes,ito)
         self.assertEqual(status,200)
         self.assertIn('默认25mm基底_测试遮光掩模_切割.dxf',data['files'])
@@ -185,6 +189,34 @@ class EditorTests(unittest.TestCase):
             self.assertIn('测试遮光掩模_校验报告.txt',package.namelist())
         saved=json.loads(s.DRAFT.read_text(encoding='utf-8'))
         self.assertEqual(saved['outputs']['test_mask'],'默认25mm基底_测试遮光掩模_切割.dxf')
+
+    def test_test_mask_uses_nearest_size_snap_and_stays_inside_active_area(self):
+        holes=[{'type':'rect_array','width':3.17,'height':2.93,'nx':1,'ny':1,
+                'pitch_x':0,'pitch_y':0,'origin':[0,0],'region_role':'active'}]
+        ito=[{'type':'rect_array','width':10,'height':10,'nx':1,'ny':1,
+              'pitch_x':0,'pitch_y':0,'origin':[0,0]}]
+        prepared,_=s.prepare(holes,ito)
+        part,_=s.manufacturing.build_test_mask(prepared,s.m,s.area_stats)
+        for actual,expected in zip(s.m.shape_bbox(part.holes[0]),(-1.25,-1.15,1.25,1.15)):
+            self.assertAlmostEqual(actual,expected,places=9)
+        source=s.area_stats.geometry(s.area_stats.active_apertures(prepared,s.m)[0])
+        result=s.m.shape_geometry(part.holes[0])
+        self.assertTrue(source.contains(result))
+        self.assertGreater(source.boundary.distance(result),0)
+
+    def test_test_mask_scale_and_snap_are_configurable_and_must_shrink(self):
+        holes=[{'type':'rect_array','width':3.17,'height':2.93,'nx':1,'ny':1,
+                'pitch_x':0,'pitch_y':0,'origin':[0,0],'region_role':'active'}]
+        ito=[{'type':'rect_array','width':10,'height':10,'nx':1,'ny':1,
+              'pitch_x':0,'pitch_y':0,'origin':[0,0]}]
+        settings=s.initial();settings['test_mask']={'aperture_scale':.7,'size_snap_mm':.2}
+        prepared,_=s.prepare(holes,ito,project_settings=settings)
+        part,_=s.manufacturing.build_test_mask(prepared,s.m,s.area_stats)
+        for actual,expected in zip(s.m.shape_bbox(part.holes[0]),(-1.1,-1,1.1,1)):
+            self.assertAlmostEqual(actual,expected,places=9)
+        settings['test_mask']['aperture_scale']=1
+        with self.assertRaisesRegex(s.m.SpecError,'小于1'):
+            s.prepare(holes,ito,project_settings=settings)
 
     def test_statistics_missing_ito_is_explicit(self):
         status,data=self.post('statistics',[{'type':'circle','diameter':2}],[],markings=[])
