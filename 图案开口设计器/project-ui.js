@@ -7,8 +7,8 @@ function defaultMarkCenter(){const h=project.skeleton.handle,b=rawBounds(frame.o
 function layoutSettings(){let s={};for(const key of ['kind','name','substrate','skeleton','test_mask','clearance_mm','min_web_mm','arc_segments_per_90','curve_tolerance_mm'])if(key in project)s[key]=clone(project[key]);s.foil={};for(const key of ['per_window','outline','frame_holes'])if(key in project.foil)s.foil[key]=clone(project.foil[key]);return s}
 function shapeSizeText(shape){if(!shape)return'—';if(shape.type==='circle')return`Ø${shape.diameter}`;if(shape.type==='rect')return`${shape.width}×${shape.height}`;return'自定义外形'}
 function bboxSizeText(shape){let b=rawBounds(shape);return`${round(b[2]-b[0])}×${round(b[3]-b[1])}`}
-function layoutSummary(multiline=true){let sk=project.skeleton,sub=project.substrate,w=sk.windows||{},picks=sk.pick_hole?(Array.isArray(sk.pick_hole)?sk.pick_hole:[sk.pick_hole]):[],handle=sk.handle?(Array.isArray(sk.handle)?sk.handle:[sk.handle]):[],foilCustom=project.foil.outline,tm=project.test_mask||{};let parts=[`基板 ${shapeSizeText(sub)}`,`掩模片 ${frame.foil_outline?bboxSizeText(frame.foil_outline):shapeSizeText(foilCustom||sk.outline)}${foilCustom?'（独立外形）':'（跟随骨架）'}`,`骨架主体 ${shapeSizeText(sk.outline)}${handle.length&&frame.outline?'，总外形 '+bboxSizeText(frame.outline):''}`,w.type==='array'?`${w.nx}×${w.ny} 图案阵列，中心距${w.pitch_x}×${w.pitch_y??w.pitch_x}`:`${frame.centers.length} 个定位开口`];if(handle.length)parts.push(`把手 ${handle.map(h=>h.width+'×'+h.height).join(' / ')}`);parts.push(`每格${picks.length}个取片缺口${picks.length?'，R'+picks.map(p=>p.diameter/2).join('/'):'（无）'}`);parts.push(`安装孔：${sk.frame_holes||project.foil.frame_holes?'已设置':'无'}`);parts.push(`测试遮光 mask：${tm.enabled===false?'关闭':`通光孔 ${(tm.aperture_scale??.8)*100}% 边长，${tm.size_snap_mm??.1} mm 吸附`}`);return parts.join(multiline?'\n':' · ')}
-function updateProjectSummary(){$('project-name').textContent=project.name+' · '+(projectDirectory||'');$('project-name').title=projectDirectory;$('project-summary').textContent=layoutSummary();$('project-summary').style.whiteSpace='pre-line'}
+function layoutSummary(multiline=true){let sk=project.skeleton,sub=project.substrate,w=sk.windows||{},picks=sk.pick_hole?(Array.isArray(sk.pick_hole)?sk.pick_hole:[sk.pick_hole]):[],handle=sk.handle?(Array.isArray(sk.handle)?sk.handle:[sk.handle]):[],foilCustom=project.foil.outline,tm=project.test_mask||{};let parts=[`基板 ${shapeSizeText(sub)}`,`掩模片 ${frame.foil_outline?bboxSizeText(frame.foil_outline):shapeSizeText(foilCustom||sk.outline)}${foilCustom?'（独立外形）':'（跟随骨架）'}`,`骨架 ${shapeSizeText(sk.outline)}${handle.length&&frame.outline?'，总外形 '+bboxSizeText(frame.outline):''}`,w.type==='array'?`阵列 ${w.nx}×${w.ny}，中心距 ${w.pitch_x}×${w.pitch_y??w.pitch_x}`:`定位开口 ${frame.centers.length} 个`];if(handle.length)parts.push(`把手 ${handle.map(h=>h.width+'×'+h.height).join('、')}`);parts.push(`取片缺口 ${picks.length?picks.length+' 个，R'+picks.map(p=>p.diameter/2).join('、'):'无'}`);parts.push(`安装孔 ${sk.frame_holes||project.foil.frame_holes?'已设置':'无'}`);parts.push(`测试 mask ${tm.enabled===false?'关闭':`${(tm.aperture_scale??.8)*100}% 边长，${tm.size_snap_mm??.1} mm 吸附`}`);return parts.join(multiline?'\n':'；')}
+function updateProjectSummary(){$('project-name').textContent=project.name;$('project-name').title=projectDirectory||project.name;$('project-summary').textContent=layoutSummary();$('project-summary').style.whiteSpace='pre-line'}
 function scheduleAutoSave(){clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(async()=>{let rev=checkSequence;try{await api('save',designPayload());if(rev===checkSequence)$('save-state').textContent='已自动保存'}catch(e){if(rev===checkSequence)$('save-state').textContent='待保存：'+e.message}},1200)}
 
 function drawPartCanvas(kind,g){
@@ -16,8 +16,8 @@ function drawPartCanvas(kind,g){
   rawShape(frame.outline,g,'#add8e6','#6b97a7',.25);
   for(const shape of frame.windows)rawShape(shape,g,'white','#6b97a7',.16);
   for(const shape of frame.tooling||[])rawShape(shape,g,'white','#6b97a7',.16);
-  $('canvas-label').textContent='骨架外框 · 实际加工轮廓';
-  $('canvas-subtitle').textContent=`主体 ${shapeSizeText(project.skeleton.outline)} · ${frame.windows.length} 个定位开口`;
+  $('canvas-label').textContent='骨架外框';
+  $('canvas-subtitle').textContent=`主体 ${shapeSizeText(project.skeleton.outline)}，${frame.windows.length} 个定位开口`;
   return;
  }
  if(kind==='foil'){
@@ -26,16 +26,16 @@ function drawPartCanvas(kind,g){
   if(project.foil.per_window!==false){for(const [x,y,angle]of frame.centers){let cell=node('g',{transform:`translate(${x} ${y}) rotate(${angle})`},g);for(const shape of apertures)renderShape(shape,cell)}}
   else for(const shape of apertures)renderShape(shape,g);
   for(const shape of frame.foil_tooling||[])rawShape(shape,g,'white','#a99a55',.16);
-  $('canvas-label').textContent='掩模片外框 · 实际加工轮廓';
+  $('canvas-label').textContent='掩模片外框';
   $('canvas-subtitle').textContent=project.foil.outline?`独立外形 ${shapeSizeText(project.foil.outline)}`:'外形跟随骨架（含把手）';
   return;
  }
  const tm=frame.test_mask||{};
  if(tm.outline)rawShape(tm.outline,g,'#fff2af','#d4c77b',.08);
  for(const shape of tm.holes||[])rawShape(shape,g,'white','#197366',.06);
- $('canvas-label').textContent='测试 mask · 单片加工轮廓';
+ $('canvas-label').textContent='测试 mask';
  const config=project.test_mask||{};
- $('canvas-subtitle').textContent=!tm.enabled?'自动生成已关闭':tm.error?`暂不能生成：${tm.error}`:`${(tm.holes||[]).length} 个通光孔 · ${(config.aperture_scale??.8)*100}% 边长 · ${config.size_snap_mm??.1} mm 吸附`;
+ $('canvas-subtitle').textContent=!tm.enabled?'自动生成已关闭':tm.error?`暂不能生成：${tm.error}`:`${(tm.holes||[]).length} 个通光孔，${(config.aperture_scale??.8)*100}% 边长，${config.size_snap_mm??.1} mm 吸附`;
 }
 
 async function applyPartConfiguration(update,button){
@@ -53,7 +53,7 @@ function partProperties(parent,kind){
  function heading(text){let h=document.createElement('h3');h.className='selection-title';h.textContent=text;parent.append(h)}
  function fields(defs){let row=document.createElement('div');row.className='row';for(const def of defs){let [key,label,value,options]=def,wrap=document.createElement('div');wrap.className='field';if(options?.span)wrap.classList.add('span');let l=document.createElement('label');l.htmlFor='part-'+key;l.textContent=label;let input;if(options?.choices){input=document.createElement('select');for(const [v,text]of Object.entries(options.choices)){let o=document.createElement('option');o.value=v;o.textContent=text;input.append(o)}input.value=value}else{input=document.createElement('input');input.type=options?.type||'number';if(input.type==='checkbox'){input.checked=!!value;input.style.width='auto'}else{input.value=value;input.step=options?.step??'.1';if(options?.min!==undefined)input.min=options.min;if(options?.max!==undefined)input.max=options.max}}input.id='part-'+key;controls[key]=input;wrap.append(l,input);row.append(wrap)}parent.append(row)}
  function number(key,label){let input=controls[key],value=Number(input.value);if(!input.reportValidity()||input.value===''||!Number.isFinite(value))throw Error(`请检查${label}`);return value}
- function advanced(){let b=document.createElement('button');b.className='small';b.style.width='100%';b.textContent='打开完整板件设置';b.onclick=()=>$('project-settings').click();parent.append(b)}
+ function advanced(){let b=document.createElement('button');b.className='small';b.style.width='100%';b.textContent='完整设置';b.onclick=()=>$('project-settings').click();parent.append(b)}
  function apply(text,update){let b=document.createElement('button');b.className='primary';b.style.width='100%';b.textContent=text;b.onclick=()=>applyPartConfiguration(update,b);parent.append(b)}
  if(kind==='skeleton'){
   heading('骨架外框');let outline=project.skeleton.outline,handles=project.skeleton.handle?(Array.isArray(project.skeleton.handle)?project.skeleton.handle:[project.skeleton.handle]):[];
@@ -62,7 +62,7 @@ function partProperties(parent,kind){
   fields([['width','主体宽度 / mm',outline.width,{min:.01}],['height','主体高度 / mm',outline.height,{min:.01}],['radius','外框圆角 R / mm',outline.corner_radius||0,{min:0}]]);
   fields([['handle','把手位置',handle.edge||'none',{span:true,choices:{none:'不设置',top:'顶边',bottom:'底边',left:'左边',right:'右边'}}],['handlewidth','把手沿边宽度 / mm',handle.width||60,{min:.01}],['handleheight','把手凸出长度 / mm',handle.height||40,{min:.01}],['handleoffset','把手沿边偏移 / mm',handle.offset||0,{}]]);
   let toggle=()=>{let off=controls.handle.value==='none';for(const key of ['handlewidth','handleheight','handleoffset'])controls[key].disabled=off};controls.handle.onchange=toggle;toggle();
-  apply('应用骨架外框',s=>{s.skeleton.outline={type:'rect',width:number('width','骨架宽度'),height:number('height','骨架高度'),corner_radius:number('radius','骨架圆角')};if(controls.handle.value==='none')delete s.skeleton.handle;else s.skeleton.handle={edge:controls.handle.value,width:number('handlewidth','把手宽度'),height:number('handleheight','把手长度'),offset:number('handleoffset','把手偏移')}});advanced();return;
+  apply('应用',s=>{s.skeleton.outline={type:'rect',width:number('width','骨架宽度'),height:number('height','骨架高度'),corner_radius:number('radius','骨架圆角')};if(controls.handle.value==='none')delete s.skeleton.handle;else s.skeleton.handle={edge:controls.handle.value,width:number('handlewidth','把手宽度'),height:number('handleheight','把手长度'),offset:number('handleoffset','把手偏移')}});advanced();return;
  }
  if(kind==='foil'){
   heading('掩模片外框');let outline=project.foil.outline;
@@ -71,7 +71,7 @@ function partProperties(parent,kind){
   fields([['mode','外形模式',mode,{span:true,choices:{follow:'跟随骨架外形（含把手）',rect:'独立矩形',circle:'独立圆形'}}]]);
   fields([['width','矩形宽度 / mm',base.width||190,{min:.01}],['height','矩形高度 / mm',base.height||190,{min:.01}],['radius','矩形圆角 R / mm',base.corner_radius||0,{min:0}],['diameter','圆形直径 / mm',base.diameter||190,{min:.01}]]);
   let toggle=()=>{let mode=controls.mode.value;for(const key of ['width','height','radius'])controls[key].disabled=mode!=='rect';controls.diameter.disabled=mode!=='circle'};controls.mode.onchange=toggle;toggle();
-  apply('应用掩模片外框',s=>{if(controls.mode.value==='follow')delete s.foil.outline;else if(controls.mode.value==='circle')s.foil.outline={type:'circle',diameter:number('diameter','掩模片直径')};else s.foil.outline={type:'rect',width:number('width','掩模片宽度'),height:number('height','掩模片高度'),corner_radius:number('radius','掩模片圆角')}});advanced();return;
+  apply('应用',s=>{if(controls.mode.value==='follow')delete s.foil.outline;else if(controls.mode.value==='circle')s.foil.outline={type:'circle',diameter:number('diameter','掩模片直径')};else s.foil.outline={type:'rect',width:number('width','掩模片宽度'),height:number('height','掩模片高度'),corner_radius:number('radius','掩模片圆角')}});advanced();return;
  }
  heading('测试 mask');let config=project.test_mask||{},outline=config.outline;
  if(outline&&!['rect','circle'].includes(outline.type)){parent.insertAdjacentHTML('beforeend','<p class="hint">当前测试 mask 使用高级自定义轮廓，请在完整板件设置的高级 JSON 中编辑。</p>');advanced();return}
@@ -79,7 +79,7 @@ function partProperties(parent,kind){
  fields([['enabled','自动生成测试 mask',config.enabled!==false,{type:'checkbox',span:true}],['scale','通光孔边长比例 / %',(config.aperture_scale??.8)*100,{min:.1,max:99.9}],['snap','尺寸吸附 / mm',config.size_snap_mm??.1,{min:.001}],['margin','外框边缘余量 / mm',config.edge_margin_mm??project.min_web_mm??.3,{min:0}]]);
  fields([['mode','mask 外形',mode,{span:true,choices:{substrate:'跟随基板',rect:'独立矩形',circle:'独立圆形'}}],['width','矩形宽度 / mm',base.width||25,{min:.01}],['height','矩形高度 / mm',base.height||25,{min:.01}],['radius','矩形圆角 R / mm',base.corner_radius||0,{min:0}],['diameter','圆形直径 / mm',base.diameter||25,{min:.01}]]);
  let toggle=()=>{let mode=controls.mode.value;for(const key of ['width','height','radius'])controls[key].disabled=mode!=='rect';controls.diameter.disabled=mode!=='circle'};controls.mode.onchange=toggle;toggle();
- apply('应用测试 mask 设置',s=>{let tm={...(s.test_mask||{}),enabled:controls.enabled.checked,aperture_scale:number('scale','边长比例')/100,size_snap_mm:number('snap','吸附步长'),edge_margin_mm:number('margin','边缘余量')};if(controls.mode.value==='substrate')delete tm.outline;else if(controls.mode.value==='circle')tm.outline={type:'circle',diameter:number('diameter','测试 mask 直径')};else tm.outline={type:'rect',width:number('width','测试 mask 宽度'),height:number('height','测试 mask 高度'),corner_radius:number('radius','测试 mask 圆角')};s.test_mask=tm});advanced();
+ apply('应用',s=>{let tm={...(s.test_mask||{}),enabled:controls.enabled.checked,aperture_scale:number('scale','边长比例')/100,size_snap_mm:number('snap','吸附步长'),edge_margin_mm:number('margin','边缘余量')};if(controls.mode.value==='substrate')delete tm.outline;else if(controls.mode.value==='circle')tm.outline={type:'circle',diameter:number('diameter','测试 mask 直径')};else tm.outline={type:'rect',width:number('width','测试 mask 宽度'),height:number('height','测试 mask 高度'),corner_radius:number('radius','测试 mask 圆角')};s.test_mask=tm});advanced();
 }
 const layoutFieldDefinitions=[
  ['project-section','基本信息','section'],['name','项目名称','text'],
@@ -117,10 +117,10 @@ $('apply-layout').onclick=async()=>{let b=$('apply-layout');b.disabled=true;try{
 
 let importedProject=null;
 async function saveCurrent(){clearTimeout(autoSaveTimer);let r=await api('save',designPayload());$('save-state').textContent='已保存';return r}
-async function listProjects(){let response=await fetch('/api/projects'),r=await response.json();if(!response.ok)throw Error(r.error);$('library-path').textContent='新项目保存位置：'+r.library_dir;let list=$('project-library');list.replaceChildren();for(const p of r.projects){let card=document.createElement('div');card.className='project-card';let title=document.createElement('strong');title.textContent=p.name+(p.current?' · 当前项目':'');let info=document.createElement('div');info.className='hint';info.textContent=`${p.cells} 个定位开口`;let path=document.createElement('div');path.className='hint';path.style.overflowWrap='anywhere';path.textContent=p.path;let open=document.createElement('button');open.className='small';open.textContent=p.current?'已打开':'打开项目';open.disabled=p.current;open.onclick=async()=>{open.disabled=true;try{await saveCurrent();await api('project-open',{id:p.id,project_key:projectKey});location.reload()}catch(e){toast(e.message);open.disabled=false}};card.append(title,info,path,open);list.append(card)}}
+async function listProjects(){let response=await fetch('/api/projects'),r=await response.json();if(!response.ok)throw Error(r.error);$('library-path').textContent='保存位置：'+r.library_dir;let list=$('project-library');list.replaceChildren();for(const p of r.projects){let card=document.createElement('div');card.className='project-card';let title=document.createElement('strong');title.textContent=p.name+(p.current?'（当前）':'');let info=document.createElement('div');info.className='hint';info.textContent=`${p.cells} 个定位开口`;let path=document.createElement('div');path.className='hint';path.style.overflowWrap='anywhere';path.textContent=p.path;let open=document.createElement('button');open.className='small';open.textContent=p.current?'已打开':'打开';open.disabled=p.current;open.onclick=async()=>{open.disabled=true;try{await saveCurrent();await api('project-open',{id:p.id,project_key:projectKey});location.reload()}catch(e){toast(e.message);open.disabled=false}};card.append(title,info,path,open);list.append(card)}}
 $('manage-projects').onclick=async()=>{try{await listProjects();$('projects-dialog').showModal()}catch(e){toast(e.message)}};$('close-projects').onclick=()=>$('projects-dialog').close();
 function showNew(mode){importedProject=null;$('new-project-mode').value=mode;$('new-project-name').value=mode==='copy'?project.name+' 副本':'新建掩模项目';$('new-project-error').textContent='';$('new-project-dialog').showModal()}
-$('new-project').onclick=()=>showNew('empty');$('copy-project').onclick=()=>showNew('copy');$('new-in-library').onclick=()=>{$('projects-dialog').close();showNew('empty')};
+$('new-project').onclick=()=>showNew('empty');$('copy-project').onclick=()=>showNew('copy');$('new-in-library').onclick=()=>{$('projects-dialog').close();showNew('empty')};document.addEventListener('click',e=>{let menu=$('project-actions-menu');if(menu.open&&!menu.contains(e.target))menu.open=false});for(const id of ['new-project','manage-projects','copy-project'])$(id).addEventListener('click',()=>$('project-actions-menu').removeAttribute('open'));
 $('create-project').onclick=async()=>{let b=$('create-project');b.disabled=true;try{let name=$('new-project-name').value.trim();if(!name)throw Error('请输入项目名称');await saveCurrent();let route=importedProject?'project-import':$('new-project-mode').value==='copy'?'project-copy':'project-new';await api(route,{name,spec:importedProject,project_key:projectKey});if(route==='project-new')sessionStorage.setItem('open-layout-after-reload','1');location.reload()}catch(e){$('new-project-error').textContent=e.message}finally{b.disabled=false}};$('cancel-new-project').onclick=()=>$('new-project-dialog').close();
 $('import-project').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;const obj=JSON.parse((await file.text()).replace(/^\uFEFF/,''));if(!obj.skeleton||!obj.substrate||!obj.foil)throw Error('请选择完整蒸镀总成项目JSON');$('projects-dialog').close();showNew('copy');importedProject=obj;$('new-project-name').value=obj.name||file.name.replace(/\.json$/i,'');$('new-project-mode').disabled=true}catch(e){toast(e.message)}finally{e.target.value=''}};
 $('new-project-dialog').addEventListener('close',()=>{$('new-project-mode').disabled=false});
