@@ -1,5 +1,9 @@
 # Ohm Mask Designer
 
+<p align="center">
+  <img src="assets/ohm-logo.svg" alt="武汉欧姆科技有限公司 Logo" width="520">
+</p>
+
 Ohm Mask Designer（欧姆掩模设计器）是一款本地浏览器应用，用于从基板、掩模片和骨架尺寸开始，完成蒸镀掩模总成设计、图案开口编辑、ITO 有效面积分析、几何校验和加工文件导出。
 
 纯网页版：[https://littleblack2003.github.io/ohm-mask-designer/](https://littleblack2003.github.io/ohm-mask-designer/)
