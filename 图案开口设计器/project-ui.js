@@ -13,32 +13,29 @@ function scheduleAutoSave(){clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout
 
 function drawPartCanvas(kind,g){
  if(kind==='skeleton'){
-  if(assemblyGridVisible)drawGridBackground(g);
   rawShape(frame.outline,g,'#add8e6','#6b97a7',.25);
   for(const shape of frame.windows)rawShape(shape,g,'white','#6b97a7',.16);
   for(const shape of frame.tooling||[])rawShape(shape,g,'white','#6b97a7',.16);
-  drawCoordinateAxes(g,rawBounds(frame.outline),assemblyGridVisible);
+  if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(frame.outline))}
   $('canvas-label').textContent='骨架外框';
   $('canvas-subtitle').textContent=`主体 ${shapeSizeText(project.skeleton.outline)}，${frame.windows.length} 个定位开口`;
   return;
  }
  if(kind==='foil'){
-  if(assemblyGridVisible)drawGridBackground(g);
   const foilOutline=frame.foil_outline||frame.outline;rawShape(foilOutline,g,'#fff2af','#d4c77b',.25);
   const apertures=shapes.filter(s=>s.type!=='text'&&(s.layer||'aperture')==='aperture');
   if(project.foil.per_window!==false){for(const [x,y,angle]of frame.centers){let cell=node('g',{transform:`translate(${x} ${y}) rotate(${angle})`},g);for(const shape of apertures)renderShape(shape,cell)}}
   else for(const shape of apertures)renderShape(shape,g);
   for(const shape of frame.foil_tooling||[])rawShape(shape,g,'white','#a99a55',.16);
-  drawCoordinateAxes(g,rawBounds(foilOutline),assemblyGridVisible);
+  if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(foilOutline))}
   $('canvas-label').textContent='掩模片外框';
   $('canvas-subtitle').textContent=project.foil.outline?`独立外形 ${shapeSizeText(project.foil.outline)}`:'外形跟随骨架（含把手）';
   return;
  }
  const tm=frame.test_mask||{};
- if(assemblyGridVisible)drawGridBackground(g);
  const gridOutline=tm.outline||frame.foil_outline||frame.outline;if(tm.outline)rawShape(tm.outline,g,'#fff2af','#d4c77b',.08);
  for(const shape of tm.holes||[])rawShape(shape,g,'white','#197366',.06);
- drawCoordinateAxes(g,rawBounds(gridOutline),assemblyGridVisible);
+ if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(gridOutline))}
  $('canvas-label').textContent='测试 mask';
  const config=project.test_mask||{};
  $('canvas-subtitle').textContent=!tm.enabled?'自动生成已关闭':tm.error?`暂不能生成：${tm.error}`:`${(tm.holes||[]).length} 个通光孔，${(config.aperture_scale??.8)*100}% 边长，${config.size_snap_mm??.1} mm 吸附`;
@@ -93,39 +90,31 @@ function partProperties(parent,kind){
  let toggle=()=>{let mode=controls.mode.value;for(const key of ['width','height','radius'])controls[key].disabled=mode!=='rect';controls.diameter.disabled=mode!=='circle'};controls.mode.onchange=toggle;toggle();
  apply('应用',s=>{let tm={...(s.test_mask||{}),enabled:controls.enabled.checked,aperture_scale:number('scale','边长比例')/100,size_snap_mm:number('snap','吸附步长'),edge_margin_mm:number('margin','边缘余量')};if(controls.mode.value==='substrate')delete tm.outline;else if(controls.mode.value==='circle')tm.outline={type:'circle',diameter:number('diameter','测试 mask 直径')};else tm.outline={type:'rect',width:number('width','测试 mask 宽度'),height:number('height','测试 mask 高度'),corner_radius:number('radius','测试 mask 圆角')};s.test_mask=tm});advanced();
 }
+const layoutPages=[['project','基本信息'],['substrate','基板'],['skeleton','骨架'],['array','定位开口与图案阵列'],['foil','掩模片'],['testmask','测试 mask'],['advanced','高级设置']];
 const layoutFieldDefinitions=[
- ['project-section','基本信息','section'],['name','项目名称','text'],
- ['substrate-section','基板尺寸（样品）','section'],['subtype','基板形状',{rect:'矩形',circle:'圆形'}],
- ['subw','基板宽度 / mm',25],['subh','基板高度 / mm',25],['subd','基板直径 / mm',25],['subr','基板圆角 R / mm',0],
- ['foil-section','掩模片外形','section'],['foiltype','掩模片外形模式',{follow:'跟随骨架外形（含把手）',rect:'独立矩形',circle:'独立圆形'}],
- ['foilw','掩模片宽度 / mm',190],['foilh','掩模片高度 / mm',190],['foild','掩模片直径 / mm',190],['foilr','掩模片圆角 R / mm',0],
- ['skeleton-section','骨架外形','section'],
- ['bodyw','骨架主体宽度 / mm',190],['bodyh','骨架主体高度 / mm',190],['bodyr','骨架外框圆角 R / mm',0],
- ['array-section','定位开口与图案阵列','section'],
- ['clearance','总旷量 / mm',.2],['minweb','最小筋宽要求 / mm',.3],
- ['nx','图案阵列列数',6],['ny','图案阵列行数',6],['px','X 中心距 / mm',30],['py','Y 中心距 / mm',30],
- ['centered','阵列自动居中','checkbox'],['ox','阵列起点 X / mm',-75],['oy','阵列起点 Y / mm',-75],['arrayangle','阵列旋转角 / °',0],
- ['testmask-section','测试遮光 mask','section'],['testmaskenabled','自动生成测试 mask','checkbox'],
- ['testmaskscale','通光孔边长比例 / %',80],['testmasksnap','通光孔尺寸吸附 / mm',.1],['testmaskmargin','外框边缘余量 / mm',.3],
- ['details-section','把手、缺口与安装孔','section'],['perwindow','每格复制图案','checkbox'],['handleedge','把手位置',{none:'不设置',top:'顶边',bottom:'底边',left:'左边',right:'右边'}],
- ['handlew','把手沿边宽度 / mm',60],['handleh','把手凸出长度 / mm',40],['handleoffset','把手沿边偏移 / mm',0],
- ['pickpos','取片缺口位置',{none:'不设置',top_right:'右上角',top_left:'左上角',bottom_right:'右下角',bottom_left:'左下角',top:'顶边',bottom:'底边',left:'左边',right:'右边'}],
- ['pickr','取片缺口 R / mm',2.5],['pickinset','取片缺口内缩 / mm',0],['pickoffset','边上缺口偏移 / mm',0],
- ['mounttarget','安装孔（可选）',{none:'不设置',both:'两片',frame:'骨架',foil:'掩模片'}],['mountd','安装孔直径 / mm',3],['mountinset','四角安装孔内缩 / mm',5]
+ ['name','项目名称','text','project'],
+ ['subtype','基板形状',{rect:'矩形',circle:'圆形'},'substrate'],['subw','基板宽度 / mm',25,'substrate'],['subh','基板高度 / mm',25,'substrate'],['subd','基板直径 / mm',25,'substrate'],['subr','基板圆角 R / mm',0,'substrate'],
+ ['bodyw','骨架主体宽度 / mm',190,'skeleton'],['bodyh','骨架主体高度 / mm',190,'skeleton'],['bodyr','骨架外框圆角 R / mm',0,'skeleton'],
+ ['handleedge','把手位置',{none:'不设置',top:'顶边',bottom:'底边',left:'左边',right:'右边'},'skeleton'],['handlew','把手沿边宽度 / mm',60,'skeleton'],['handleh','把手凸出长度 / mm',40,'skeleton'],['handleoffset','把手沿边偏移 / mm',0,'skeleton'],
+ ['pickpos','取片缺口位置',{none:'不设置',top_right:'右上角',top_left:'左上角',bottom_right:'右下角',bottom_left:'左下角',top:'顶边',bottom:'底边',left:'左边',right:'右边'},'skeleton'],['pickr','取片缺口 R / mm',2.5,'skeleton'],['pickinset','取片缺口内缩 / mm',0,'skeleton'],['pickoffset','边上缺口偏移 / mm',0,'skeleton'],
+ ['mounttarget','安装孔（可选）',{none:'不设置',both:'两片',frame:'骨架',foil:'掩模片'},'skeleton'],['mountd','安装孔直径 / mm',3,'skeleton'],['mountinset','四角安装孔内缩 / mm',5,'skeleton'],
+ ['clearance','总旷量 / mm',.2,'array'],['minweb','最小筋宽要求 / mm',.3,'array'],['nx','图案阵列列数',6,'array'],['ny','图案阵列行数',6,'array'],['px','X 中心距 / mm',30,'array'],['py','Y 中心距 / mm',30,'array'],['centered','阵列自动居中','checkbox','array'],['ox','阵列起点 X / mm',-75,'array'],['oy','阵列起点 Y / mm',-75,'array'],['arrayangle','阵列旋转角 / °',0,'array'],
+ ['foiltype','掩模片外形模式',{follow:'跟随骨架外形（含把手）',rect:'独立矩形',circle:'独立圆形'},'foil'],['foilw','掩模片宽度 / mm',190,'foil'],['foilh','掩模片高度 / mm',190,'foil'],['foild','掩模片直径 / mm',190,'foil'],['foilr','掩模片圆角 R / mm',0,'foil'],['perwindow','每格复制图案','checkbox','foil'],
+ ['testmaskenabled','自动生成测试 mask','checkbox','testmask'],['testmaskscale','通光孔边长比例 / %',80,'testmask'],['testmasksnap','通光孔尺寸吸附 / mm',.1,'testmask'],['testmaskmargin','外框边缘余量 / mm',.3,'testmask']
 ];
-function makeLayoutFields(){let grid=$('layout-grid');for(const [key,label,kind]of layoutFieldDefinitions){if(kind==='section'){let section=document.createElement('h3');section.className='layout-section';section.textContent=label;grid.append(section);continue}let field=document.createElement('div');field.className='field';if(key==='name'||key==='foiltype')field.classList.add('span');let l=document.createElement('label');l.htmlFor='layout-'+key;l.textContent=label;let input;if(typeof kind==='object'){input=document.createElement('select');for(const [v,t]of Object.entries(kind)){let option=document.createElement('option');option.value=v;option.textContent=t;input.append(option)}}else{input=document.createElement('input');input.type=kind==='checkbox'?'checkbox':kind==='text'?'text':'number';if(input.type==='number'){input.step=['nx','ny'].includes(key)?'1':'.001';input.min=['nx','ny'].includes(key)?'1':'0';if(['nx','ny'].includes(key))input.max=20;if(key==='testmaskscale'){input.min='.1';input.max='99.9'}if(key==='testmasksnap')input.min='.001'}if(input.type==='checkbox')input.style.width='auto'}input.id='layout-'+key;input.setAttribute('aria-label',label);field.append(l,input);grid.append(field)}for(const key of ['subtype','foiltype','centered','nx','ny','px','py'])$('layout-'+key).onchange=layoutConstraints}
+let activeLayoutPage='substrate';
+function setLayoutPage(page){activeLayoutPage=page;const advanced=page==='advanced';$('layout-fields').hidden=advanced;$('layout-advanced').hidden=!advanced;document.querySelectorAll('.layout-page[data-layout-page]').forEach(p=>p.hidden=p.dataset.layoutPage!==page);document.querySelectorAll('#layout-tabs button').forEach(b=>{const selected=b.dataset.layoutPage===page;b.classList.toggle('active',selected);b.setAttribute('aria-selected',String(selected))})}
+function makeLayoutFields(){let tabs=$('layout-tabs'),grid=$('layout-grid'),pages={};for(const [key,label]of layoutPages){let button=document.createElement('button');button.type='button';button.textContent=label;button.dataset.layoutPage=key;button.setAttribute('role','tab');button.onclick=()=>setLayoutPage(key);tabs.append(button);if(key==='advanced')continue;let page=document.createElement('section');page.className='layout-page stats-inputs';page.dataset.layoutPage=key;page.hidden=true;let title=document.createElement('h3');title.className='layout-page-title';title.textContent=label;page.append(title);grid.append(page);pages[key]=page}for(const [key,label,kind,page]of layoutFieldDefinitions){let field=document.createElement('div');field.className='field';if(key==='name'||key==='foiltype')field.classList.add('span');let l=document.createElement('label');l.htmlFor='layout-'+key;l.textContent=label;let input;if(typeof kind==='object'){input=document.createElement('select');for(const [v,t]of Object.entries(kind)){let option=document.createElement('option');option.value=v;option.textContent=t;input.append(option)}}else{input=document.createElement('input');input.type=kind==='checkbox'?'checkbox':kind==='text'?'text':'number';if(input.type==='number'){input.step=['nx','ny'].includes(key)?'1':'.001';input.min=['nx','ny'].includes(key)?'1':'0';if(['nx','ny'].includes(key))input.max=20;if(key==='testmaskscale'){input.min='.1';input.max='99.9'}if(key==='testmasksnap')input.min='.001'}if(input.type==='checkbox')input.style.width='auto'}input.id='layout-'+key;input.setAttribute('aria-label',label);field.append(l,input);pages[page].append(field)}for(const key of ['subtype','foiltype','centered','nx','ny','px','py'])$('layout-'+key).onchange=layoutConstraints;setLayoutPage(activeLayoutPage)}
 function layoutConstraints(){const circle=$('layout-subtype').value==='circle';for(const key of ['subw','subh','subr'])$('layout-'+key).disabled=circle;$('layout-subd').disabled=!circle;const foiltype=$('layout-foiltype').value,foilFollow=foiltype==='follow',foilCircle=foiltype==='circle';for(const key of ['foilw','foilh','foilr'])$('layout-'+key).disabled=foilFollow||foilCircle;$('layout-foild').disabled=foilFollow||!foilCircle;let centered=$('layout-centered').checked;for(const key of ['ox','oy'])$('layout-'+key).disabled=centered;if(centered){const x=(+$('layout-nx').value-1)*+$('layout-px').value/2,y=(+$('layout-ny').value-1)*+$('layout-py').value/2,a=+$('layout-arrayangle').value*Math.PI/180;$('layout-ox').value=-x*Math.cos(a)+y*Math.sin(a);$('layout-oy').value=-x*Math.sin(a)-y*Math.cos(a)}}
 function fillLayout(){const s=layoutSettings(),sk=s.skeleton,w=sk.windows||{},h=Array.isArray(sk.handle)?sk.handle[0]:sk.handle,p=Array.isArray(sk.pick_hole)?sk.pick_hole[0]:sk.pick_hole,fh=sk.frame_holes,ff=s.foil.frame_holes,mount=fh||ff,fo=s.foil.outline,tm=s.test_mask||{};let v={name:s.name,subtype:s.substrate.type,subw:s.substrate.width||25,subh:s.substrate.height||25,subd:s.substrate.diameter||25,subr:s.substrate.corner_radius||0,foiltype:fo?.type||'follow',foilw:fo?.width||sk.outline.width||190,foilh:fo?.height||sk.outline.height||190,foild:fo?.diameter||190,foilr:fo?.corner_radius||0,bodyw:sk.outline.width||190,bodyh:sk.outline.height||190,bodyr:sk.outline.corner_radius||0,clearance:s.clearance_mm??.2,minweb:s.min_web_mm??.3,nx:w.nx||1,ny:w.ny||1,px:w.pitch_x||30,py:w.pitch_y??w.pitch_x??30,ox:w.origin?.[0]||0,oy:w.origin?.[1]||0,arrayangle:w.angle||0,perwindow:s.foil.per_window!==false,testmaskenabled:tm.enabled!==false,testmaskscale:(tm.aperture_scale??.8)*100,testmasksnap:tm.size_snap_mm??.1,testmaskmargin:tm.edge_margin_mm??s.min_web_mm??.3,handleedge:h?(h.edge||'top'):'none',handlew:h?.width||60,handleh:h?.height||40,handleoffset:h?.offset||0,pickpos:p?(p.corner||p.edge||'top'):'none',pickr:(p?.diameter||5)/2,pickinset:p?.inset||0,pickoffset:p?.offset||0,mounttarget:fh&&ff?'both':fh?'frame':ff?'foil':'none',mountd:mount?.diameter||3,mountinset:mount?.inset??5};
  let a=(w.angle||0)*Math.PI/180,cx=-(v.nx-1)*v.px/2,cy=-(v.ny-1)*v.py/2;v.centered=Math.abs(v.ox-(cx*Math.cos(a)-cy*Math.sin(a)))<1e-6&&Math.abs(v.oy-(cx*Math.sin(a)+cy*Math.cos(a)))<1e-6;
- for(const [key,,kind]of layoutFieldDefinitions){if(kind==='section')continue;let input=$('layout-'+key);if(kind==='checkbox')input.checked=!!v[key];else input.value=v[key]}
+ for(const [key,,kind]of layoutFieldDefinitions){let input=$('layout-'+key);if(kind==='checkbox')input.checked=!!v[key];else input.value=v[key]}
  let complex=(sk.outline.type&&sk.outline.type!=='rect')||(fo&& !['rect','circle'].includes(fo.type))||(w.type&&w.type!=='array')||w.stagger||w.skip?.length||(Array.isArray(sk.handle)&&sk.handle.length>1)||(Array.isArray(sk.pick_hole)&&sk.pick_hole.length>1)||mount?.positions||mount?.skip_corners?.length||(fh&&ff&&JSON.stringify(fh)!==JSON.stringify(ff));
- $('layout-mode').value=complex?'json':'form';$('layout-json').value=JSON.stringify(s,null,2);$('layout-error').textContent=complex?'当前项目使用高级几何配置，可在JSON中完整保留和修改。':'';toggleLayoutMode();layoutConstraints();
+ $('layout-json').value=JSON.stringify(s,null,2);$('layout-error').textContent=complex?'当前项目使用复杂几何配置，请在高级设置中编辑。':'';if(complex)setLayoutPage('advanced');else setLayoutPage(activeLayoutPage);layoutConstraints();
 }
-function toggleLayoutMode(){let advanced=$('layout-mode').value==='json';$('layout-fields').hidden=advanced;$('layout-advanced').hidden=!advanced}
 function formLayout(){const n=k=>{let value=Number($('layout-'+k).value);if($('layout-'+k).value===''||!Number.isFinite(value))throw Error('请输入有效数值');return value};let s=layoutSettings();s.name=$('layout-name').value.trim();s.substrate=$('layout-subtype').value==='circle'?{type:'circle',diameter:n('subd')}:{type:'rect',width:n('subw'),height:n('subh'),corner_radius:n('subr')};s.clearance_mm=n('clearance');s.min_web_mm=n('minweb');s.skeleton.outline={type:'rect',width:n('bodyw'),height:n('bodyh'),corner_radius:n('bodyr')};let foiltype=$('layout-foiltype').value;if(foiltype==='follow')delete s.foil.outline;else if(foiltype==='circle')s.foil.outline={type:'circle',diameter:n('foild')};else s.foil.outline={type:'rect',width:n('foilw'),height:n('foilh'),corner_radius:n('foilr')};layoutConstraints();s.skeleton.windows={type:'array',nx:n('nx'),ny:n('ny'),pitch_x:n('px'),pitch_y:n('py'),origin:[n('ox'),n('oy')],angle:n('arrayangle')};s.foil.per_window=$('layout-perwindow').checked;s.test_mask={...(s.test_mask||{}),enabled:$('layout-testmaskenabled').checked,aperture_scale:n('testmaskscale')/100,size_snap_mm:n('testmasksnap'),edge_margin_mm:n('testmaskmargin')};let edge=$('layout-handleedge').value;if(edge==='none')delete s.skeleton.handle;else s.skeleton.handle={edge,width:n('handlew'),height:n('handleh'),offset:n('handleoffset')};let pos=$('layout-pickpos').value;if(pos==='none')delete s.skeleton.pick_hole;else{s.skeleton.pick_hole=[{diameter:2*n('pickr'),inset:n('pickinset')}];if(pos.includes('_'))s.skeleton.pick_hole[0].corner=pos;else{s.skeleton.pick_hole[0].edge=pos;s.skeleton.pick_hole[0].offset=n('pickoffset')}}let target=$('layout-mounttarget').value;delete s.skeleton.frame_holes;delete s.foil.frame_holes;if(target!=='none'){let f={diameter:n('mountd'),inset:n('mountinset')};if(['both','frame'].includes(target))s.skeleton.frame_holes=clone(f);if(['both','foil'].includes(target))s.foil.frame_holes=clone(f)}return s}
-$('layout-mode').onchange=toggleLayoutMode;$('layout-arrayangle')?.addEventListener('change',layoutConstraints);
 $('project-settings').onclick=()=>{fillLayout();$('layout-dialog').showModal()};$('close-layout').onclick=()=>$('layout-dialog').close();$('reset-layout').onclick=fillLayout;
-$('apply-layout').onclick=async()=>{let b=$('apply-layout');b.disabled=true;try{let settings=$('layout-mode').value==='json'?JSON.parse($('layout-json').value):formLayout(),r=await api('layout',{...designPayload(),project_settings:settings});project=r.spec;frame=r.frame;extent=cellExtent();cameras={};updateProjectSummary();$('layout-dialog').close();history=[];future=[];selected.clear();changed();await api('save',designPayload());$('save-state').textContent='已保存项目设置';toast('项目设置已应用并保存')}catch(e){$('layout-error').textContent=e.message}finally{b.disabled=false}};
+$('apply-layout').onclick=async()=>{let b=$('apply-layout');b.disabled=true;try{let settings=activeLayoutPage==='advanced'?JSON.parse($('layout-json').value):formLayout(),r=await api('layout',{...designPayload(),project_settings:settings});project=r.spec;frame=r.frame;extent=cellExtent();cameras={};updateProjectSummary();$('layout-dialog').close();history=[];future=[];selected.clear();changed();await api('save',designPayload());$('save-state').textContent='已保存项目设置';toast('项目设置已应用并保存')}catch(e){$('layout-error').textContent=e.message}finally{b.disabled=false}};
 
 let importedProject=null;
 async function saveCurrent(){clearTimeout(autoSaveTimer);let r=await api('save',designPayload());$('save-state').textContent='已保存';return r}
