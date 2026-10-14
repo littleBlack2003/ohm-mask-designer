@@ -105,7 +105,7 @@ class EditorTests(unittest.TestCase):
         self.assertFalse(s.OUTPUT.exists())
 
     def test_marking_saved_and_separate_cut_and_mark_files(self):
-        marks=[{'text':'闵老师组25mm','center':[0,115],'height':3,'angle':0,'target':'skeleton'}]
+        marks=[{'text':'默认25mm','center':[0,115],'height':3,'angle':0,'target':'skeleton'}]
         status,data=self.post('generate',[{'type':'circle','diameter':2}],markings=marks)
         self.assertEqual(status,200)
         self.assertTrue(any(f.endswith('.zip') for f in data['files']))

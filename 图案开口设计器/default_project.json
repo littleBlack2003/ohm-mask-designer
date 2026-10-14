@@ -1,6 +1,6 @@
 {
   "kind": "evaporation",
-  "name": "闵老师组高通量25mm掩模版",
+  "name": "默认25mm基底",
   "_stage": "GUI图案设计",
   "clearance_mm": 0.2,
   "min_web_mm": 0.3,

@@ -1,7 +1,7 @@
 {
   "kind": "evaporation",
-  "name": "闵老师组高通量25mm掩模版",
-  "_stage": "GUI图案设计",
+  "name": "默认25mm基底",
+  "_stage": "加工图纸",
   "clearance_mm": 0.2,
   "min_web_mm": 0.3,
   "arc_segments_per_90": 24,
@@ -175,24 +175,5 @@
         ]
       }
     ]
-  },
-  "laser_marking": [
-    {
-      "text": "2026年10月12日 JM",
-      "height": 4,
-      "center": [
-        -0.2,
-        126.4
-      ],
-      "angle": 180,
-      "target": "skeleton"
-    }
-  ],
-  "uncertainty_settings": {
-    "distribution": "uniform",
-    "aperture_mm": 0.01,
-    "ito_mm": 0.0,
-    "registration_x_mm": 0.0,
-    "registration_y_mm": 0.0
   }
 }

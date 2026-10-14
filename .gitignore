@@ -23,10 +23,10 @@ dist/
 
 # Generated manufacturing outputs
 *.zip
-闵老师组高通量25mm掩模版/加工图纸/
-闵老师组高通量25mm掩模版/*加工图纸包*/
-闵老师组高通量25mm掩模版/*有效面积*.csv
-闵老师组高通量25mm掩模版/pixel有效面积.json
+默认25mm基底/加工图纸/
+默认25mm基底/*加工图纸包*/
+默认25mm基底/*有效面积*.csv
+默认25mm基底/pixel有效面积.json
 
 # User-created projects
 掩模项目/

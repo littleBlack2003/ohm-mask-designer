@@ -39,7 +39,7 @@ python -X utf8 -B -m unittest discover -s "pvd-shadow-mask/tests" -p "test_*.py"
 
 - `图案开口设计器/`：浏览器 GUI、项目管理、统计、校验和加工导出。
 - `pvd-shadow-mask/`：Codex Skill、几何生成脚本、格式规范和示例。
-- `闵老师组高通量25mm掩模版/`：可复现的示例项目配置。
+- `默认25mm基底/`：可复现的示例项目配置。
 
 详细使用方法见 [`图案开口设计器/使用说明.md`](图案开口设计器/使用说明.md)。
 

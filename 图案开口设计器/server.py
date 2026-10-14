@@ -17,7 +17,7 @@ ROOT = Path(sys._MEIPASS) / '图案开口设计器' if getattr(sys,'frozen',Fals
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import manufacturing
 import area_statistics as area_stats
-PROJECT = ROOT.parent / '闵老师组高通量25mm掩模版'
+PROJECT = ROOT.parent / '默认25mm基底'
 SOURCE = PROJECT / '项目设置.json'
 DRAFT = PROJECT / '图案开口设计草稿.json'
 OUTPUT = PROJECT / '加工图纸'

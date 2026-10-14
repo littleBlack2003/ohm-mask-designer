@@ -8,7 +8,7 @@
   window.OHM_STATIC_MODE = true;
   const nativeFetch = window.fetch.bind(window);
   const assetBase = new URL('.', location.href);
-  const storeKey = 'ohm-mask-designer-web-projects-v1';
+  const storeKey = 'ohm-mask-designer-web-projects-v2';
   const pyodideBase = 'https://cdn.jsdelivr.net/pyodide/v0.28.3/full/';
   const fontUrl = 'https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/Variable/TTF/Subset/NotoSansSC-VF.ttf';
   let enginePromise;
