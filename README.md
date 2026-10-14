@@ -45,8 +45,10 @@ python -X utf8 -B -m unittest discover -s "pvd-shadow-mask/tests" -p "test_*.py"
 
 ## 开源许可与联系
 
-本项目以 [MIT License](LICENSE) 开源，欢迎使用、修改、分发和参与贡献。提交代码前请阅读 [参与贡献说明](CONTRIBUTING.md)。
+本项目由**武汉欧姆科技有限公司**发起并维护，以 [Apache License 2.0](LICENSE) 开源，未附加额外许可限制。欢迎使用、修改、分发和参与贡献。提交代码前请阅读 [参与贡献说明](CONTRIBUTING.md)。
 
 - GitHub：<https://github.com/littleBlack2003/ohm-mask-designer>
 - 联系邮箱：<dasohm@163.com>
+
+武汉欧姆科技有限公司提供掩模制作服务，自带完整加工图纸的客户可以获得优惠报价。详情见 [掩模制作服务](SERVICE.md)。
 
