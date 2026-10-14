@@ -5,6 +5,8 @@ repo=root.parent
 datas=[(str(root/'index.html'),'图案开口设计器'),
        (str(root/'project-ui.js'),'图案开口设计器'),
        (str(root/'canvas-controls.js'),'图案开口设计器'),
+       (str(root/'static-api.js'),'图案开口设计器'),
+       (str(root/'pyodide.js'),'图案开口设计器'),
        (str(root/'default_project.json'),'图案开口设计器'),
        (str(repo/'pvd-shadow-mask/scripts/make_mask.py'),'pvd-shadow-mask/scripts')]
 a=Analysis([str(root/'browser_app.py')],pathex=[str(root)],datas=datas,

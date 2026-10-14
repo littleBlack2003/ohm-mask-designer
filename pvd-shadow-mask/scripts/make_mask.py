@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -625,7 +626,17 @@ def marking_preview(spec):
         from matplotlib.textpath import TextPath
     except ImportError:
         raise SpecError('文字打标需要 Matplotlib: python -m pip install -r requirements.txt')
-    font = findfont(FontProperties(family='Microsoft YaHei'), fallback_to_default=False)
+    font_override = os.environ.get('OHM_MASK_FONT')
+    if font_override and Path(font_override).is_file():
+        font = font_override
+    else:
+        try:
+            font = findfont(FontProperties(family='Microsoft YaHei'), fallback_to_default=False)
+        except ValueError:
+            # The pure web edition runs in Pyodide and supplies an open font when
+            # available. DejaVu Sans keeps Latin marking usable if that download
+            # is unavailable.
+            font = findfont(FontProperties(family='DejaVu Sans'), fallback_to_default=True)
     preview = []
     for item in items:
         text = item.get('text', '')
