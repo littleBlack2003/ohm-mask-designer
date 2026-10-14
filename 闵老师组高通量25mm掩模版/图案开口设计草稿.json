@@ -1,0 +1,198 @@
+{
+  "kind": "evaporation",
+  "name": "闵老师组高通量25mm掩模版",
+  "_stage": "GUI图案设计",
+  "clearance_mm": 0.2,
+  "min_web_mm": 0.3,
+  "arc_segments_per_90": 24,
+  "curve_tolerance_mm": 0.001,
+  "substrate": {
+    "type": "rect",
+    "width": 25,
+    "height": 25,
+    "corner_radius": 0
+  },
+  "skeleton": {
+    "outline": {
+      "type": "rect",
+      "width": 190,
+      "height": 190
+    },
+    "windows": {
+      "type": "array",
+      "nx": 6,
+      "ny": 6,
+      "pitch_x": 30,
+      "pitch_y": 30,
+      "origin": [
+        -75,
+        -75
+      ]
+    },
+    "handle": {
+      "width": 60,
+      "height": 40,
+      "edge": "top"
+    },
+    "pick_hole": [
+      {
+        "diameter": 5,
+        "corner": "top_right"
+      }
+    ]
+  },
+  "foil": {
+    "per_window": true,
+    "cell": [
+      {
+        "type": "rect_array",
+        "width": 3,
+        "height": 11,
+        "angle": 0,
+        "nx": 1,
+        "ny": 1,
+        "pitch_x": 0,
+        "pitch_y": 0,
+        "origin": [
+          -5,
+          -7
+        ]
+      },
+      {
+        "type": "rect_array",
+        "width": 3,
+        "height": 11,
+        "angle": 0,
+        "nx": 1,
+        "ny": 1,
+        "pitch_x": 0,
+        "pitch_y": 0,
+        "origin": [
+          0,
+          -7
+        ]
+      },
+      {
+        "type": "rect_array",
+        "width": 3,
+        "height": 11,
+        "angle": 0,
+        "nx": 1,
+        "ny": 1,
+        "pitch_x": 0,
+        "pitch_y": 0,
+        "origin": [
+          5,
+          -7
+        ]
+      },
+      {
+        "type": "rect_array",
+        "width": 3,
+        "height": 11,
+        "angle": 0,
+        "nx": 1,
+        "ny": 1,
+        "pitch_x": 0,
+        "pitch_y": 0,
+        "origin": [
+          -5,
+          7
+        ]
+      },
+      {
+        "type": "rect_array",
+        "width": 3,
+        "height": 11,
+        "angle": 0,
+        "nx": 1,
+        "ny": 1,
+        "pitch_x": 0,
+        "pitch_y": 0,
+        "origin": [
+          0,
+          7
+        ]
+      },
+      {
+        "type": "rect_array",
+        "width": 3,
+        "height": 11,
+        "angle": 0,
+        "nx": 1,
+        "ny": 1,
+        "pitch_x": 0,
+        "pitch_y": 0,
+        "origin": [
+          5,
+          7
+        ]
+      },
+      {
+        "type": "rect_array",
+        "width": 4,
+        "height": 10,
+        "angle": 0,
+        "nx": 1,
+        "ny": 1,
+        "pitch_x": 0,
+        "pitch_y": 0,
+        "origin": [
+          -10.5,
+          0
+        ]
+      },
+      {
+        "type": "rect_array",
+        "width": 4,
+        "height": 10,
+        "angle": 0,
+        "nx": 1,
+        "ny": 1,
+        "pitch_x": 0,
+        "pitch_y": 0,
+        "origin": [
+          10.5,
+          0
+        ]
+      }
+    ]
+  },
+  "ito_effective": {
+    "features": [
+      {
+        "type": "rect_array",
+        "width": 25,
+        "height": 10,
+        "angle": 0,
+        "nx": 1,
+        "ny": 1,
+        "pitch_x": 0,
+        "pitch_y": 0,
+        "origin": [
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "laser_marking": [
+    {
+      "text": "2026年10月12日 JM",
+      "height": 4,
+      "center": [
+        -0.2,
+        126.4
+      ],
+      "angle": 180,
+      "target": "skeleton"
+    }
+  ],
+  "uncertainty_settings": {
+    "distribution": "uniform",
+    "aperture_mm": 0.01,
+    "ito_mm": 0.0,
+    "registration_x_mm": 0.0,
+    "registration_y_mm": 0.0
+  }
+}

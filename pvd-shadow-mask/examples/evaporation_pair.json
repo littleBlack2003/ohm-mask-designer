@@ -1,0 +1,49 @@
+{
+  "kind": "evaporation",
+  "name": "EV-15-L530-R1",
+  "label": "EV-15 530nm  REV A",
+  "clearance_mm": 0.2,
+  "min_web_mm": 0.30,
+  "arc_segments_per_90": 24,
+
+  "substrate": {
+    "type": "rect",
+    "width": 15.0,
+    "height": 15.0
+  },
+
+  "skeleton": {
+    "outline": {
+      "type": "rect",
+      "width": 25.0,
+      "height": 25.0,
+      "corner_radius": 1.0
+    },
+    "frame_holes": {
+      "diameter": 2.0,
+      "inset": 3.0
+    },
+    "pick_hole": {
+      "diameter": 3.0,
+      "edge": "top"
+    }
+  },
+
+  "foil": {
+    "features": [
+      {
+        "type": "circle_array",
+        "diameter": 1.2,
+        "pitch_x": 4.0,
+        "pitch_y": 4.0,
+        "nx": 3,
+        "ny": 3,
+        "origin": [-4.0, -4.0]
+      }
+    ],
+    "frame_holes": {
+      "diameter": 2.0,
+      "inset": 3.0
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "kind": "light_block",
+  "name": "LB-15-A",
+  "label": "LB-15 遮光阵列  A",
+  "min_web_mm": 0.30,
+  "arc_segments_per_90": 24,
+
+  "substrate": {
+    "type": "rect",
+    "width": 15.0,
+    "height": 15.0
+  },
+
+  "silvered": {
+    "type": "rect",
+    "width": 13.0,
+    "height": 13.0
+  },
+
+  "aperture_inset_mm": 0.3,
+
+  "features": [
+    {
+      "type": "circle_array",
+      "diameter": 1.0,
+      "pitch_x": 2.5,
+      "pitch_y": 2.5,
+      "nx": 4,
+      "ny": 4,
+      "origin": [-3.75, -3.75]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "evaporation",
+  "name": "EV-母板-4x3",
+  "label": "EV 母板 4x3  REV A",
+  "clearance_mm": 0.2,
+  "min_web_mm": 0.30,
+  "arc_segments_per_90": 24,
+
+  "substrate": {
+    "type": "rect",
+    "width": 15.0,
+    "height": 15.0
+  },
+
+  "skeleton": {
+    "outline": {
+      "type": "rect",
+      "width": 195.0,
+      "height": 190.0,
+      "corner_radius": 2.0
+    },
+    "windows": {
+      "type": "array",
+      "pitch_x": 48.0,
+      "pitch_y": 62.0,
+      "nx": 4,
+      "ny": 3,
+      "origin": [-72.0, -62.0]
+    },
+    "frame_holes": {
+      "diameter": 3.2,
+      "inset": 8.0
+    },
+    "pick_hole": {
+      "diameter": 7.6,
+      "edge": "top"
+    },
+    "handle": {
+      "width": 50.0,
+      "height": 34.0,
+      "edge": "top"
+    }
+  },
+
+  "foil": {
+    "per_window": true,
+    "features": [
+      {
+        "type": "circle_array",
+        "diameter": 1.2,
+        "pitch_x": 4.0,
+        "pitch_y": 4.0,
+        "nx": 3,
+        "ny": 3,
+        "origin": [-4.0, -4.0]
+      }
+    ],
+    "frame_holes": {
+      "diameter": 3.2,
+      "inset": 8.0
+    }
+  }
+}

@@ -1,0 +1,41 @@
+# Ohm Mask Designer
+
+Ohm Mask Designer（欧姆掩模设计器）是一款本地浏览器应用，用于从基板、掩模片和骨架尺寸开始，完成蒸镀掩模总成设计、图案开口编辑、ITO 有效面积分析、几何校验和加工文件导出。
+
+## 主要功能
+
+- 分别设置矩形或圆形基板、掩模片和骨架尺寸。
+- 掩模片可跟随骨架外形，也可使用独立矩形或圆形外形。
+- 设置图案阵列、定位开口、把手、取片缺口和可选安装孔。
+- 绘制矩形、圆形、长槽和多边形图案开口，并支持移动、阵列和居中。
+- 独立编辑 ITO 有效区域和激光打标文字图层。
+- 统计开孔数量，计算单 Pixel 有效面积及解析面积不确定度。
+- 校验轮廓边界、重叠、最小筋宽以及掩模片对定位开口的覆盖。
+- 导出掩模片与骨架切割 DXF、激光打标 DXF、装配参考、SVG 预览、CSV、JSON 和加工文件包。
+
+## 从源码启动
+
+需要 Python 3.10 或更高版本。
+
+```powershell
+python -m pip install -r requirements.txt
+python -X utf8 -B "图案开口设计器/launch.py"
+```
+
+Windows 用户也可以双击 `图案开口设计器/启动设计器.cmd`。设计器会在本机启动服务并打开 `http://127.0.0.1:8765/`，不需要 AutoCAD。
+
+## 测试
+
+```powershell
+python -X utf8 -B -m unittest discover -s "图案开口设计器" -p "test_*.py"
+python -X utf8 -B -m unittest discover -s "pvd-shadow-mask/tests" -p "test_*.py"
+```
+
+## 目录
+
+- `图案开口设计器/`：浏览器 GUI、项目管理、统计、校验和加工导出。
+- `pvd-shadow-mask/`：Codex Skill、几何生成脚本、格式规范和示例。
+- `闵老师组高通量25mm掩模版/`：可复现的示例项目配置。
+
+详细使用方法见 [`图案开口设计器/使用说明.md`](图案开口设计器/使用说明.md)。
+

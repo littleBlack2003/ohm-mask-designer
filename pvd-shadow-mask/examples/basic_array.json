@@ -1,0 +1,49 @@
+{
+  "name": "SM-100-WL530-R3",
+  "label": "SM-100 530nm 带通  REV A",
+  "material": "SUS304",
+  "thickness_mm": 0.20,
+  "edge_margin_mm": 1.0,
+  "min_web_mm": 0.30,
+  "arc_segments_per_90": 24,
+
+  "outline": {
+    "type": "rect",
+    "width": 100.0,
+    "height": 100.0,
+    "corner_radius": 3.0
+  },
+
+  "frame_holes": {
+    "diameter": 3.2,
+    "inset": 6.0
+  },
+
+  "features": [
+    {
+      "type": "circle_array",
+      "diameter": 1.6,
+      "pitch_x": 8.0,
+      "pitch_y": 8.0,
+      "nx": 9,
+      "ny": 9,
+      "origin": [-32.0, -32.0]
+    },
+    {
+      "type": "slot",
+      "center": [0.0, 44.0],
+      "length": 12.0,
+      "width": 3.0,
+      "angle": 0
+    },
+    {
+      "type": "polygon",
+      "points": [
+        [38.0, -6.0],
+        [48.0, -6.0],
+        [48.0, 6.0],
+        [38.0, 6.0]
+      ]
+    }
+  ]
+}

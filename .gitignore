@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Local runtime files
+*.log
+*.tmp
+*.bak
+*.dwl
+*.dwl2
+
+# Packaged applications and build caches
+软件发布/
+图案开口设计器/打包缓存/
+build/
+dist/
+*.exe
+*.pkg
+
+# Generated manufacturing outputs
+*.zip
+闵老师组高通量25mm掩模版/加工图纸/
+闵老师组高通量25mm掩模版/*加工图纸包*/
+闵老师组高通量25mm掩模版/*有效面积*.csv
+闵老师组高通量25mm掩模版/pixel有效面积.json
+
+# User-created projects
+掩模项目/
+
+# Editor and OS metadata
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+

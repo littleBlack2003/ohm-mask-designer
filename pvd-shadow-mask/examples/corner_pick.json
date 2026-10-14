@@ -1,0 +1,59 @@
+{
+  "kind": "evaporation",
+  "name": "DEMO-15-3x3-corner",
+  "label": "3x3 evaporation demo",
+  "clearance_mm": 0.2,
+  "min_web_mm": 0.3,
+  "arc_segments_per_90": 24,
+  "substrate": {
+    "type": "rect",
+    "width": 15.0,
+    "height": 15.0
+  },
+  "skeleton": {
+    "outline": {
+      "type": "rect",
+      "width": 75,
+      "height": 75,
+      "corner_radius": 2.0
+    },
+    "windows": {
+      "type": "array",
+      "pitch_x": 20.0,
+      "pitch_y": 20.0,
+      "nx": 3,
+      "ny": 3,
+      "origin": [
+        -20,
+        -20
+      ]
+    },
+    "pick_hole": {
+      "diameter": 4,
+      "corner": "top_right"
+    },
+    "handle": {
+      "width": 24,
+      "height": 14,
+      "edge": "top"
+    }
+  },
+  "foil": {
+    "per_window": true,
+    "cell": [
+      {
+        "type": "rect_array",
+        "width": 2.4,
+        "height": 14.0,
+        "pitch_x": 3.8,
+        "pitch_y": 0,
+        "nx": 2,
+        "ny": 1,
+        "origin": [
+          -1.9,
+          0.0
+        ]
+      }
+    ]
+  }
+}
