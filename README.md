@@ -43,3 +43,10 @@ python -X utf8 -B -m unittest discover -s "pvd-shadow-mask/tests" -p "test_*.py"
 
 详细使用方法见 [`图案开口设计器/使用说明.md`](图案开口设计器/使用说明.md)。
 
+## 开源许可与联系
+
+本项目以 [MIT License](LICENSE) 开源，欢迎使用、修改、分发和参与贡献。提交代码前请阅读 [参与贡献说明](CONTRIBUTING.md)。
+
+- GitHub：<https://github.com/littleBlack2003/ohm-mask-designer>
+- 联系邮箱：<dasohm@163.com>
+

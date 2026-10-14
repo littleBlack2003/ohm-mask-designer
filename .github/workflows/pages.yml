@@ -36,6 +36,7 @@ jobs:
           cp "图案开口设计器/area_statistics.py" _site/
           cp "图案开口设计器/default_project.json" _site/
           cp "pvd-shadow-mask/scripts/make_mask.py" _site/
+          cp LICENSE _site/LICENSE.txt
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
