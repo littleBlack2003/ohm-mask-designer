@@ -8,6 +8,8 @@ Ohm Mask Designer（欧姆掩模设计器）是一款本地浏览器应用，用
 
 纯网页版：[https://littleblack2003.github.io/ohm-mask-designer/](https://littleblack2003.github.io/ohm-mask-designer/)
 
+Windows 便携版：[下载最新版本](https://github.com/littleBlack2003/ohm-mask-designer/releases/latest)。完整解压后双击“欧姆掩模设计器.exe”，无需安装 Python 或 AutoCAD。
+
 网页版使用 Pyodide 在浏览器内运行与桌面版相同的 Python/Shapely 几何算法。项目保存在当前浏览器的本地存储中，建议定期导出项目 JSON 备份；生成的 DXF、SVG、CSV 和 ZIP 直接下载到本机。首次打开需要联网加载浏览器计算运行时和中文矢量字体。
 
 ## 主要功能

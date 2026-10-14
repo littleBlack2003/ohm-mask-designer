@@ -24,7 +24,8 @@ def check(report):
     custom=json.loads(json.dumps(spec));custom['foil']['outline']={'type':'rect','width':200,'height':190,'corner_radius':3}
     editor.validate_project(custom);custom_foil,_,_=editor.m.build_evaporation(custom,custom.get('arc_segments_per_90',24))
     custom_bbox=editor.m.shape_bbox(custom_foil.outline)
-    assert files and len(statistics['pixels'])==8
+    assert files and statistics['counts']['cell_openings']==8
+    assert len(statistics['pixels'])==statistics['counts']['cell_active_openings']==6
     assert any('激光打标' in name for name in files)
     assert statistics['pixels'][0]['u_mm2']>0
     assert custom_bbox==(-100.0,-95.0,100.0,95.0)
