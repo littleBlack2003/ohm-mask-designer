@@ -13,7 +13,7 @@ def rect(w,h,x=0,y=0,angle=0):
     return dict(type='rect_array',width=w,height=h,nx=1,ny=1,pitch_x=0,pitch_y=0,origin=[x,y],angle=angle)
 
 def spec(holes,ito):
-    q=s.initial();q['foil']['cell']=holes;q['ito_effective']={'features':ito};q['laser_marking']=[]
+    q=s.initial();q['foil']['cell']=[dict(h,region_role=h.get('region_role','active')) for h in holes];q['ito_effective']={'features':ito};q['laser_marking']=[]
     return q
 
 class AreaTests(unittest.TestCase):
@@ -30,14 +30,25 @@ class AreaTests(unittest.TestCase):
     def test_region_roles_are_counted_and_indexed_independently(self):
         holes=[rect(1,1,-3),rect(1,1,0),rect(1,1,3),rect(1,1,6)]
         holes[0]['region_role']='active';holes[1]['region_role']='common'
-        holes[2]['region_role']='active'
+        holes[2]['region_role']='active';holes[3]['region_role']='unassigned'
         r=a.nominal(spec(holes,[rect(25,25)]),s.m)
         self.assertEqual(r['counts']['cell_active_openings'],2)
         self.assertEqual(r['counts']['cell_common_openings'],1)
         self.assertEqual(r['counts']['cell_unassigned_openings'],1)
         self.assertEqual(r['counts']['foil_active_openings'],72)
-        self.assertEqual([(p['region_role'],p['region_index']) for p in r['pixels']],
-                         [('active',1),('common',1),('active',2),('unassigned',1)])
+        self.assertEqual([(p['opening'],p['region_role'],p['region_index']) for p in r['pixels']],
+                         [(1,'active',1),(3,'active',2)])
+
+    def test_only_active_regions_are_calculated(self):
+        holes=[dict(rect(2,2,-3),region_role='common'),
+               dict(rect(2,2,0),region_role='unassigned'),
+               dict(rect(2,2,3),region_role='active')]
+        r=a.calculate(spec(holes,[rect(20,20)]),s.m)
+        self.assertEqual(len(r['pixels']),1)
+        self.assertEqual(r['pixels'][0]['opening'],3)
+        self.assertEqual(r['pixels'][0]['region_role'],'active')
+        with self.assertRaisesRegex(ValueError,'活性区域'):
+            a.calculate(spec(holes[:2],[rect(20,20)]),s.m)
 
     def test_rectangle_uniform_matches_propagation_formula(self):
         w,h,e=3,4,.01

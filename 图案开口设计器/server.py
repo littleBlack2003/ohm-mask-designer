@@ -27,7 +27,7 @@ loader.loader.exec_module(m)
 LOCK = threading.RLock()
 DEFAULT_SOURCE = SOURCE
 LIBRARY = ROOT.parent / '掩模项目'
-APP_VERSION = '0.4.0'
+APP_VERSION = '0.5.0'
 STOP_SERVER = None
 
 def initial():
@@ -187,7 +187,7 @@ def prepare(features, ito_features=None, markings=None, uncertainty=None, projec
     spec = initial()
     if project_settings is not None:
         if not isinstance(project_settings,dict):raise ValueError('项目设置须为对象')
-        for key in ('name','substrate','skeleton','clearance_mm','min_web_mm','arc_segments_per_90','curve_tolerance_mm'):
+        for key in ('name','substrate','skeleton','test_mask','clearance_mm','min_web_mm','arc_segments_per_90','curve_tolerance_mm'):
             if key in project_settings:spec[key]=copy.deepcopy(project_settings[key])
         if 'foil' in project_settings:
             for key in ('per_window','outline','frame_holes'):

@@ -147,7 +147,7 @@ class EditorTests(unittest.TestCase):
         self.assertEqual(self.post('save',[],markings=marks)[0],200)
 
     def test_statistics_route_and_saved_settings(self):
-        holes=[{'type':'circle','diameter':2}]
+        holes=[{'type':'circle','diameter':2,'region_role':'active'}]
         ito=[{'type':'circle','diameter':20}]
         opts={'aperture_mm':.01}
         status,data=self.post('statistics',holes,ito,markings=[],uncertainty=opts)
@@ -162,6 +162,29 @@ class EditorTests(unittest.TestCase):
         status,data=self.post('validate',holes,ito,markings=[])
         self.assertEqual(status,200)
         self.assertIn('statistics',data)
+
+    def test_active_effective_area_generates_substrate_sized_test_mask(self):
+        holes=[{'type':'rect_array','width':2,'height':4,'nx':1,'ny':1,
+                'pitch_x':0,'pitch_y':0,'origin':[-3,1],'region_role':'active'},
+               {'type':'rect_array','width':5,'height':5,'nx':1,'ny':1,
+                'pitch_x':0,'pitch_y':0,'origin':[3,0],'region_role':'common'}]
+        ito=[{'type':'rect_array','width':10,'height':2,'nx':1,'ny':1,
+              'pitch_x':0,'pitch_y':0,'origin':[0,0]}]
+        prepared,_=s.prepare(holes,ito)
+        part,report=s.manufacturing.build_test_mask(prepared,s.m,s.area_stats)
+        self.assertEqual(s.m.shape_bbox(part.outline),(-12.5,-12.5,12.5,12.5))
+        self.assertEqual(len(part.holes),1)
+        self.assertAlmostEqual(s.m.shape_area(part.holes[0]),4,places=6)
+        self.assertIn('基片/外形  : 25.000 x 25.000 mm',report)
+        status,data=self.post('generate',holes,ito)
+        self.assertEqual(status,200)
+        self.assertIn('默认25mm基底_测试遮光掩模_切割.dxf',data['files'])
+        archive=next(s.OUTPUT.glob('*.zip'))
+        with ZipFile(archive) as package:
+            self.assertIn('默认25mm基底_测试遮光掩模_切割.dxf',package.namelist())
+            self.assertIn('测试遮光掩模_校验报告.txt',package.namelist())
+        saved=json.loads(s.DRAFT.read_text(encoding='utf-8'))
+        self.assertEqual(saved['outputs']['test_mask'],'默认25mm基底_测试遮光掩模_切割.dxf')
 
     def test_statistics_missing_ito_is_explicit(self):
         status,data=self.post('statistics',[{'type':'circle','diameter':2}],[],markings=[])

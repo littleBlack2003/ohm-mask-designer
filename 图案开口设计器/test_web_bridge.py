@@ -34,6 +34,15 @@ class WebBridgeTests(unittest.TestCase):
         self.assertEqual(result['status'],422)
         self.assertIn('区域用途',result['body']['error'])
 
+    def test_web_package_contains_derived_test_mask(self):
+        body={'features':[{'type':'rect_array','width':2,'height':4,'nx':1,'ny':1,
+                           'pitch_x':0,'pitch_y':0,'origin':[0,1],'region_role':'active'}],
+              'ito_features':[{'type':'rect_array','width':10,'height':2,'nx':1,'ny':1,
+                               'pitch_x':0,'pitch_y':0,'origin':[0,0]}]}
+        result=json.loads(bridge.call('generate',json.dumps(body)))
+        self.assertEqual(result['status'],200)
+        self.assertIn('默认25mm基底_测试遮光掩模_切割.dxf',result['body']['files'])
+
 
 if __name__ == '__main__':
     unittest.main()

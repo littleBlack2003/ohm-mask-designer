@@ -125,6 +125,7 @@ ITO有效区域使用与图案开口相同的形状定义, 须在基片真实边
 - 所有孔校验是否落在 `silvered` 内缩 `aperture_inset_mm` 的区域内。
 - 内缩采用到真实边界的最短距离, 保留圆形、圆角与凹多边形边界; 不使用包围盒代替。
 - `silvered` 会作为 `REFERENCE` 参考层画在图上(不切割)。
+- GUI蒸镀总成项目会自动派生测试遮光mask：外形默认复制 `substrate`，通光孔取 `region_role: active` 的图案开口与 `ito_effective` 的交集；`common` 和 `unassigned` 不生成通光孔。
 
 输出 1 个 DXF。
 

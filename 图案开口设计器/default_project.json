@@ -56,7 +56,8 @@
         "origin": [
           -5,
           -7
-        ]
+        ],
+        "region_role": "active"
       },
       {
         "type": "rect_array",
@@ -70,7 +71,8 @@
         "origin": [
           0,
           -7
-        ]
+        ],
+        "region_role": "active"
       },
       {
         "type": "rect_array",
@@ -84,7 +86,8 @@
         "origin": [
           5,
           -7
-        ]
+        ],
+        "region_role": "active"
       },
       {
         "type": "rect_array",
@@ -98,7 +101,8 @@
         "origin": [
           -5,
           7
-        ]
+        ],
+        "region_role": "active"
       },
       {
         "type": "rect_array",
@@ -112,7 +116,8 @@
         "origin": [
           0,
           7
-        ]
+        ],
+        "region_role": "active"
       },
       {
         "type": "rect_array",
@@ -126,7 +131,8 @@
         "origin": [
           5,
           7
-        ]
+        ],
+        "region_role": "active"
       },
       {
         "type": "rect_array",
@@ -140,7 +146,8 @@
         "origin": [
           -10.5,
           0
-        ]
+        ],
+        "region_role": "common"
       },
       {
         "type": "rect_array",
@@ -154,7 +161,8 @@
         "origin": [
           10.5,
           0
-        ]
+        ],
+        "region_role": "common"
       }
     ]
   },

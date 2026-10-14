@@ -84,10 +84,18 @@ def components(g):
     return sum(components(item) for item in g.geoms)
 
 
+def active_apertures(spec, m):
+    """Expand only apertures explicitly marked as active, preserving source indexes."""
+    return [p for p in expand(spec['foil'].get('cell') or [], m)
+            if p.get('region_role', 'unassigned') == 'active']
+
+
 def nominal(spec, m):
     apertures = expand(spec['foil'].get('cell') or [], m)
+    active = [p for p in apertures if p.get('region_role', 'unassigned') == 'active']
     regions = scoped_regions(spec,expand((spec.get('ito_effective') or {}).get('features') or [], m),m)
     holes = [geometry(p) for p in apertures]
+    active_holes = [geometry(p) for p in active]
     ito = unary_union([geometry(p) for p in regions])
     hole_union = unary_union(holes)
     centers = m.window_centers(spec['skeleton']['windows'])
@@ -102,23 +110,25 @@ def nominal(spec, m):
     overlap = any(g.intersects(other) for i,g in enumerate(holes) for other in holes[i+1:])
     rows = []
     role_counts = {role: 0 for role in REGION_ROLES}
-    for i, (p,g) in enumerate(zip(apertures,holes)):
+    for p,g in zip(active,active_holes):
         role = p.get('region_role', 'unassigned')
         role_counts[role] += 1
         area = (full_area(p) if ito.covers(g) else g.intersection(ito).area) if regions else None
-        rows.append(dict(pixel=i+1, source=p['source'], shape=p['type'],
+        rows.append(dict(pixel=len(rows)+1, opening=p['source']+1, source=p['source'], shape=p['type'],
                          region_role=role, region_index=role_counts[role],
                          opening_mm2=full_area(p), area_mm2=area,
                          area_cm2=None if area is None else area/100))
+    all_role_counts = {role: sum(p.get('region_role', 'unassigned') == role for p in apertures)
+                       for role in REGION_ROLES}
     return dict(counts=dict(cells=len(centers), cell_openings=len(holes),
                 cell_connected_openings=components(hole_union),
-                cell_active_openings=role_counts['active'],
-                cell_common_openings=role_counts['common'],
-                cell_unassigned_openings=role_counts['unassigned'],
+                cell_active_openings=all_role_counts['active'],
+                cell_common_openings=all_role_counts['common'],
+                cell_unassigned_openings=all_role_counts['unassigned'],
                 foil_pattern_openings=len(holes)*repeats, foil_mounting_holes=foil_tooling,
-                foil_active_openings=role_counts['active']*repeats,
-                foil_common_openings=role_counts['common']*repeats,
-                foil_unassigned_openings=role_counts['unassigned']*repeats,
+                foil_active_openings=all_role_counts['active']*repeats,
+                foil_common_openings=all_role_counts['common']*repeats,
+                foil_unassigned_openings=all_role_counts['unassigned']*repeats,
                 foil_total_openings=len(holes)*repeats+foil_tooling,
                 frame_positioning_openings=len(cuts), frame_mounting_holes=frame_tooling,
                 frame_total_openings=len(cuts)+frame_tooling), pixels=rows,
@@ -205,9 +215,9 @@ def calculate(spec,m,options=None):
     result=nominal(spec,m);result['settings']=opts;result['method']='formula'
     if not result['ito_defined']:raise ValueError('请先绘制ITO有效区域；未定义ITO时不假定整个基片均有效')
     if result['overlapping']:raise ValueError('图案开口相交或重叠，请处理后再计算每个pixel的不确定度')
-    apertures=expand(spec['foil'].get('cell') or [],m)
+    apertures=active_apertures(spec,m)
     regions=scoped_regions(spec,expand(spec['ito_effective']['features'],m),m)
-    if not apertures:raise ValueError('请先绘制图案开口')
+    if not apertures:raise ValueError('请先将至少一个图案开口标记为活性区域；公共电极和未标记开口不计算面积不确定度')
     span=1 if opts['distribution']=='uniform' else 3
     for ps,error in [(apertures,opts['aperture_mm']),(regions,opts['ito_mm'])]:
         for p in ps:
@@ -256,7 +266,8 @@ def calculate(spec,m,options=None):
         row.update(u_mm2=u,U_mm2=2*u,relative_u_percent=100*u/row['area_mm2'] if row['area_mm2'] else None,
                    formula=formula,warning=model['warning'],status='conservative' if model['warning'] else 'ok')
     result['notes']=[
-        '区域标记仅区分开口用途，不改变加工轮廓；有效面积=单个图案开口∩ITO区域并集，每个开口的面积和不确定度独立报告，不加和。',
+        '仅计算标记为活性区域的开口；公共电极区域和未标记开口不进入面积与不确定度结果。区域标记不改变加工轮廓。',
+        '有效面积=单个活性区域开口∩ITO区域并集，每个活性区域的面积和不确定度独立报告，不加和。',
         '公式：u(A)=√[Σ(∂A/∂qᵢ·u(qᵢ))²]，输入误差独立；±公差a按u(q)=a/√3换算，直接输入标准不确定度时不换算。',
         '矩形交集：Lx=max(0,min(x右,xITO右)−max(x左,xITO左))，Ly同理；A=Lx×Ly。按当前裁切关系求解析灵敏度。',
         'w/h为开口完整宽高，d为直径，l为槽总长；W/H为ITO完整宽高，X/Y为相对定位平移。旋转角度固定。',

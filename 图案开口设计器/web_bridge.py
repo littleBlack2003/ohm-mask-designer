@@ -10,7 +10,7 @@ import make_mask as m
 import manufacturing
 
 
-APP_VERSION = "0.4.0 Web"
+APP_VERSION = "0.5.0 Web"
 CURRENT_SPEC = {}
 
 
@@ -107,7 +107,7 @@ def prepare(body):
         if not isinstance(project_settings, dict):
             raise ValueError("项目设置须为对象")
         for key in (
-            "name", "substrate", "skeleton", "clearance_mm", "min_web_mm",
+            "name", "substrate", "skeleton", "test_mask", "clearance_mm", "min_web_mm",
             "arc_segments_per_90", "curve_tolerance_mm",
         ):
             if key in project_settings:
