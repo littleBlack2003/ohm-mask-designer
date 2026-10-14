@@ -13,29 +13,32 @@ function scheduleAutoSave(){clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout
 
 function drawPartCanvas(kind,g){
  if(kind==='skeleton'){
+  drawGridBackground(g);
   rawShape(frame.outline,g,'#add8e6','#6b97a7',.25);
   for(const shape of frame.windows)rawShape(shape,g,'white','#6b97a7',.16);
   for(const shape of frame.tooling||[])rawShape(shape,g,'white','#6b97a7',.16);
-  drawCoordinateGrid(g,rawBounds(frame.outline),[frame.outline]);
+  drawCoordinateAxes(g,rawBounds(frame.outline));
   $('canvas-label').textContent='骨架外框';
   $('canvas-subtitle').textContent=`主体 ${shapeSizeText(project.skeleton.outline)}，${frame.windows.length} 个定位开口`;
   return;
  }
  if(kind==='foil'){
+  drawGridBackground(g);
   const foilOutline=frame.foil_outline||frame.outline;rawShape(foilOutline,g,'#fff2af','#d4c77b',.25);
   const apertures=shapes.filter(s=>s.type!=='text'&&(s.layer||'aperture')==='aperture');
   if(project.foil.per_window!==false){for(const [x,y,angle]of frame.centers){let cell=node('g',{transform:`translate(${x} ${y}) rotate(${angle})`},g);for(const shape of apertures)renderShape(shape,cell)}}
   else for(const shape of apertures)renderShape(shape,g);
   for(const shape of frame.foil_tooling||[])rawShape(shape,g,'white','#a99a55',.16);
-  drawCoordinateGrid(g,rawBounds(foilOutline),[foilOutline]);
+  drawCoordinateAxes(g,rawBounds(foilOutline));
   $('canvas-label').textContent='掩模片外框';
   $('canvas-subtitle').textContent=project.foil.outline?`独立外形 ${shapeSizeText(project.foil.outline)}`:'外形跟随骨架（含把手）';
   return;
  }
  const tm=frame.test_mask||{};
+ drawGridBackground(g);
  const gridOutline=tm.outline||frame.foil_outline||frame.outline;if(tm.outline)rawShape(tm.outline,g,'#fff2af','#d4c77b',.08);
  for(const shape of tm.holes||[])rawShape(shape,g,'white','#197366',.06);
- drawCoordinateGrid(g,rawBounds(gridOutline),tm.outline?[tm.outline]:[]);
+ drawCoordinateAxes(g,rawBounds(gridOutline));
  $('canvas-label').textContent='测试 mask';
  const config=project.test_mask||{};
  $('canvas-subtitle').textContent=!tm.enabled?'自动生成已关闭':tm.error?`暂不能生成：${tm.error}`:`${(tm.holes||[]).length} 个通光孔，${(config.aperture_scale??.8)*100}% 边长，${config.size_snap_mm??.1} mm 吸附`;
