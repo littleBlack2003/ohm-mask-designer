@@ -94,7 +94,7 @@ function drawCoordinateAxes(g,b){
  for(let v=Math.ceil(y0/major)*major;v<=y1+major*1e-8;v+=major){let value=Math.abs(v)<major*1e-8?0:round(v),t=node('text',{...textAttrs,x:x0-offset,y:-v+font*.32,'text-anchor':'middle'},svg);t.textContent=value}
 }
 function drawGridBackground(g){
- const c=camera(),step=Math.max(.1,+$('grid-size').value||1),span=Math.max(c.w,c.h),defs=node('defs',{},g),minor=node('pattern',{id:'background-grid-minor',width:step,height:step,patternUnits:'userSpaceOnUse'},defs),majorStep=step*5,major=node('pattern',{id:'background-grid-major',width:majorStep,height:majorStep,patternUnits:'userSpaceOnUse'},defs);
+ const c=camera(),step=10,span=Math.max(c.w,c.h),defs=node('defs',{},g),minor=node('pattern',{id:'background-grid-minor',width:step,height:step,patternUnits:'userSpaceOnUse'},defs),majorStep=step*5,major=node('pattern',{id:'background-grid-major',width:majorStep,height:majorStep,patternUnits:'userSpaceOnUse'},defs);
  node('path',{d:`M0 0H${step}M0 0V${step}`,fill:'none',stroke:'#e2e8e9','stroke-width':span/2400},minor);node('path',{d:`M0 0H${majorStep}M0 0V${majorStep}`,fill:'none',stroke:'#cbd6d8','stroke-width':span/1500},major);
  const x=c.x-c.w*10,y=c.y-c.h*10,width=c.w*20,height=c.h*20;node('rect',{x,y,width,height,fill:'url(#background-grid-minor)','pointer-events':'none'},g);node('rect',{x,y,width,height,fill:'url(#background-grid-major)','pointer-events':'none'},g);
 }
@@ -136,7 +136,7 @@ function bounds(s){if(s.type==='text')return markBounds(s);if(s.type==='polygon'
 function updateWorkspaceTools(){
  const cell=view==='cell',marking=view==='marking',editable=cell||marking;
  $('layer-tools-section').hidden=!cell;$('shape-tools-section').hidden=!cell;$('text-tools-section').hidden=!marking;$('edit-tools-section').hidden=!editable;
- document.querySelector('[data-tool="select"]').hidden=!editable;$('layer-list-section').hidden=!editable;$('canvas-settings-section').hidden=false;$('snap-size-field').hidden=!editable;$('snap-toggle').hidden=!editable;$('pattern-import').hidden=!cell;$('grid-size-field').classList.toggle('span',!editable);$('canvas-settings-title').textContent=editable?'网格与吸附':'网格';$('stats-card').hidden=!cell;$('array-section').hidden=!cell;
+ document.querySelector('[data-tool="select"]').hidden=!editable;$('layer-list-section').hidden=!editable;$('canvas-settings-section').hidden=!editable;$('grid-size-field').hidden=!cell;$('snap-size-field').hidden=!editable;$('snap-toggle').hidden=!editable;$('pattern-import').hidden=!cell;$('canvas-settings-title').textContent=cell?'网格与吸附':'吸附';$('stats-card').hidden=!cell;$('array-section').hidden=!cell;
  $('layer-list-title').textContent=marking?'打标列表':activeLayer==='ito'?'ITO 列表':'图案开口列表';
  const titles={skeleton:'骨架属性',cell:activeLayer==='ito'?'ITO 属性':'图案开口属性',foil:'掩模片属性',marking:'文字打标属性',assembly:'总成预览',testmask:'测试 mask 属性'};
  $('layer-property-title').textContent=titles[view];
