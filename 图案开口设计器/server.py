@@ -273,7 +273,7 @@ class Handler(BaseHTTPRequestHandler):
             if candidate.parent!=OUTPUT.resolve() or not candidate.is_file():
                 self.send(404,{'error':'文件不存在'});return
             self.send(200,candidate.read_bytes(),mimetypes.guess_type(filename)[0] or 'application/octet-stream');return
-        if path in ['/project-ui.js','/canvas-controls.js','/static-api.js','/pyodide.js']:
+        if path in ['/project-ui.js','/canvas-controls.js','/static-api.js','/pyodide.js','/i18n.js']:
             self.send(200,(ROOT/path[1:]).read_bytes(),'text/javascript; charset=utf-8');return
         if path not in ['/','/index.html']:
             self.send(404,{'error':'页面不存在'});return
