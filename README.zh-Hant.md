@@ -1,6 +1,8 @@
 # Ohm Mask Designer
 
-[简体中文](README.md) | **繁體中文**
+[English](README.en.md) | [简体中文](README.md) | **繁體中文**
+
+> 本頁為通用繁體；台灣用語版見 [README.zh-TW.md](README.zh-TW.md)。
 
 <p align="center">
   <img src="assets/ohm-logo.svg" alt="武漢歐姆科技有限公司 Logo" width="520">
