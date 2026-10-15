@@ -1,5 +1,7 @@
 # Ohm Mask Designer
 
+**简体中文** | [繁體中文](README.zh-Hant.md)
+
 <p align="center">
   <img src="assets/ohm-logo.svg" alt="武汉欧姆科技有限公司 Logo" width="520">
 </p>
