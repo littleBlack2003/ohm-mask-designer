@@ -281,6 +281,20 @@
     '已保存外框设置': '已儲存外框設定', '外框设置已应用并保存': '外框設定已套用並儲存'
   });
 
+  // Phase 2d: frame-properties pick-notch fields.
+  Object.assign(DICT.en, {
+    '取片缺口位置': 'Pick-notch position', '取片缺口 R / mm': 'Pick-notch R / mm', '取片缺口内缩 / mm': 'Pick-notch inset / mm',
+    '边上缺口偏移 / mm': 'Edge-notch offset / mm', '右上角': 'Top-right', '左上角': 'Top-left', '右下角': 'Bottom-right', '左下角': 'Bottom-left'
+  });
+  Object.assign(DICT['zh-Hant'], {
+    '取片缺口位置': '取片缺口位置', '取片缺口 R / mm': '取片缺口 R / mm', '取片缺口内缩 / mm': '取片缺口內縮 / mm',
+    '边上缺口偏移 / mm': '邊上缺口偏移 / mm', '右上角': '右上角', '左上角': '左上角', '右下角': '右下角', '左下角': '左下角'
+  });
+  Object.assign(DICT['zh-TW'], {
+    '取片缺口位置': '取片缺口位置', '取片缺口 R / mm': '取片缺口 R / mm', '取片缺口内缩 / mm': '取片缺口內縮 / mm',
+    '边上缺口偏移 / mm': '邊上缺口偏移 / mm', '右上角': '右上角', '左上角': '左上角', '右下角': '右下角', '左下角': '左下角'
+  });
+
   function t(s) {
     if (lang === 'zh-Hans' || s == null) return s;
     const d = DICT[lang];
