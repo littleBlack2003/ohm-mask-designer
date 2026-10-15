@@ -145,10 +145,117 @@
     }
   };
 
+  // Phase 2: dynamic UI strings (rendered by JS at runtime).
+  Object.assign(DICT.en, {
+    '自定义外形': 'Custom outline', '独立外形 ': 'Independent outline ', '外形跟随骨架（含把手）': 'Follows frame (incl. handle)',
+    '骨架属性': 'Frame properties', '掩模片属性': 'Mask-foil properties', '图案开口属性': 'Pattern-aperture properties',
+    'ITO 属性': 'ITO properties', '文字打标属性': 'Text-marking properties', '测试 mask 属性': 'Test-mask properties', '总成预览': 'Assembly preview',
+    '打标列表': 'Marking list', '图案开口列表': 'Pattern-aperture list', 'ITO 列表': 'ITO list',
+    '中心 X / mm': 'Center X / mm', '中心 Y / mm': 'Center Y / mm', '直径 / mm': 'Diameter / mm', '宽度 / mm': 'Width / mm',
+    '高度 / mm': 'Height / mm', '旋转角 / °': 'Rotation / °', '总长度 / mm': 'Total length / mm', '槽宽 / mm': 'Slot width / mm',
+    '顶点坐标 [[x,y], …] / mm': 'Vertex coordinates [[x,y], …] / mm', '应用顶点坐标': 'Apply vertex coordinates',
+    '请输入至少3个有限二维坐标': 'Enter at least 3 finite 2D coordinates', '区域用途': 'Region role',
+    '批量设置区域用途': 'Set region role for all', '多种标记': 'Multiple roles',
+    '未标记': 'Untagged', '活性区域': 'Active region', '公共电极区域': 'Common electrode region',
+    '拖动画布，滚轮缩放。': 'Drag to pan; wheel to zoom.', '选择文字后可拖动，参数在右侧修改。': 'Select text to drag; edit parameters on the right.',
+    '选择图形后拖动，参数在右侧修改。': 'Select a shape to drag; edit parameters on the right.',
+    '逐点点击，双击或按 Enter 完成。': 'Click point by point; double-click or Enter to finish.',
+    '拖动绘制，尺寸在右侧修改。': 'Drag to draw; set sizes on the right.',
+    '右侧修改参数，滚轮缩放': 'Edit parameters on the right; wheel to zoom', '全板坐标，滚轮缩放': 'Whole-panel coordinates; wheel to zoom',
+    '按 Shift 多选，滚轮缩放': 'Shift to multi-select; wheel to zoom',
+    '多边形至少需要3个顶点': 'A polygon needs at least 3 vertices', '先选择一个开口': 'Select an aperture first',
+    '最多80个开口': 'At most 80 apertures', '文字在全板坐标中编辑，请用复制按钮添加其他文字': 'Text is edited in whole-panel coordinates; use the copy button to add more text',
+    '请选中一个开口作为阵列起点': 'Select one aperture as the array start', '请检查阵列参数；单格最多80个开口': 'Check the array parameters; at most 80 apertures per cell',
+    '先选择要居中的开口': 'Select apertures to center first', '已生成加工图纸及校验报告': 'Manufacturing drawings and validation report generated',
+    '草稿已保存': 'Draft saved', '导入后的开口超过80个': 'Imported apertures exceed 80', '阵列数量无效': 'Invalid array count',
+    '不支持的图案类型：': 'Unsupported pattern type: ', 'JSON中没有单格图案': 'No single-cell pattern in the JSON',
+    '图案已导入': 'Pattern imported', '图案已导入，请处理几何错误': 'Pattern imported; please fix geometry errors',
+    '发现几何错误': 'Geometry errors found', '有筋宽警告，请查看报告': 'Web-width warnings; see the report', '几何检查通过': 'Geometry check passed',
+    '校验失败': 'Validation failed', '图案或误差设置已更改，请重新计算。': 'Pattern or error settings changed; please recompute.',
+    '正在更新统计…': 'Updating statistics…', '载入失败，请重新启动设计器': 'Load failed, please restart the designer', '操作失败': 'Operation failed',
+    '完整设置': 'Full settings', '外框': 'Outline', '基板定位开口': 'Substrate positioning openings', '应用骨架设置': 'Apply frame settings',
+    '主体宽度 / mm': 'Body width / mm', '主体高度 / mm': 'Body height / mm', '外框圆角 R / mm': 'Outline corner R / mm',
+    '把手位置': 'Handle position', '不设置': 'None', '顶边': 'Top', '底边': 'Bottom', '左边': 'Left', '右边': 'Right',
+    '把手沿边宽度 / mm': 'Handle edge width / mm', '把手凸出长度 / mm': 'Handle protrusion / mm', '把手沿边偏移 / mm': 'Handle edge offset / mm',
+    '总旷量 / mm': 'Total clearance / mm', '阵列自动居中': 'Array auto-centered', '阵列起点 X / mm': 'Array origin X / mm',
+    '阵列起点 Y / mm': 'Array origin Y / mm', '阵列旋转角 / °': 'Array rotation / °',
+    '外形模式': 'Outline mode', '跟随骨架外形（含把手）': 'Follow frame outline (incl. handle)',
+    '独立矩形': 'Independent rectangle', '独立圆形': 'Independent circle', '矩形宽度 / mm': 'Rectangle width / mm',
+    '矩形高度 / mm': 'Rectangle height / mm', '矩形圆角 R / mm': 'Rectangle corner R / mm', '圆形直径 / mm': 'Circle diameter / mm',
+    '应用项目设置': 'Apply project settings'
+  });
+  Object.assign(DICT['zh-Hant'], {
+    '自定义外形': '自訂外形', '骨架属性': '骨架屬性', '掩模片属性': '掩模片屬性', '图案开口属性': '圖案開口屬性',
+    'ITO 属性': 'ITO 屬性', '文字打标属性': '文字打標屬性', '测试 mask 属性': '測試 mask 屬性', '总成预览': '總成預覽',
+    '打标列表': '打標列表', '图案开口列表': '圖案開口列表', '区域用途': '區域用途', '批量设置区域用途': '批量設置區域用途',
+    '多种标记': '多種標記', '未标记': '未標記', '活性区域': '活性區域', '公共电极区域': '公共電極區域',
+    '自定义外形 ': '自訂外形 ', '拖动画布，滚轮缩放。': '拖動畫布，滾輪縮放。', '发现几何错误': '發現幾何錯誤',
+    '几何检查通过': '幾何檢查通過', '校验失败': '校驗失敗', '完整设置': '完整設置', '外框': '外框',
+    '基板定位开口': '基板定位開口', '应用骨架设置': '應用骨架設置', '把手位置': '把手位置', '不设置': '不設置',
+    '顶边': '頂邊', '底边': '底邊', '左边': '左邊', '右边': '右邊', '总旷量 / mm': '總曠量 / mm',
+    '阵列自动居中': '陣列自動居中', '阵列旋转角 / °': '陣列旋轉角 / °', '外形模式': '外形模式',
+    '跟随骨架外形（含把手）': '跟隨骨架外形（含把手）', '应用项目设置': '應用項目設置', '草稿已保存': '草稿已保存'
+  });
+  Object.assign(DICT['zh-TW'], {
+    '自定义外形': '自訂外形', '骨架属性': '骨架屬性', '掩模片属性': '掩模片屬性', '图案开口属性': '圖案開口屬性',
+    'ITO 属性': 'ITO 屬性', '文字打标属性': '文字打標屬性', '测试 mask 属性': '測試 mask 屬性', '总成预览': '總成預覽',
+    '打标列表': '打標清單', '图案开口列表': '圖案開口清單', '区域用途': '區域用途', '批量设置区域用途': '批次設定區域用途',
+    '多种标记': '多種標記', '未标记': '未標記', '活性区域': '活性區域', '公共电极区域': '公共電極區域',
+    '拖动画布，滚轮缩放。': '拖曳畫布，滾輪縮放。', '发现几何错误': '發現幾何錯誤', '几何检查通过': '幾何驗證通過',
+    '校验失败': '驗證失敗', '完整设置': '完整設定', '基板定位开口': '基板定位開口', '应用骨架设置': '套用骨架設定',
+    '顶边': '頂邊', '底边': '底邊', '左边': '左邊', '右边': '右邊', '总旷量 / mm': '總曠量 / mm',
+    '阵列自动居中': '陣列自動置中', '阵列旋转角 / °': '陣列旋轉角 / °', '跟随骨架外形（含把手）': '跟隨骨架外形（含把手）',
+    '应用项目设置': '套用專案設定', '草稿已保存': '草稿已儲存', '不设置': '不設定'
+  });
+
+  // Phase 2b: parameterised templates + remaining labels.
+  Object.assign(DICT.en, {
+    '文字': 'Text', '已选中 {n} 个对象': 'Selected {n} objects', '隐藏': 'Hide', '显示': 'Show',
+    ' 10 mm 网格、中心轴和坐标数字': ' 10 mm grid, center axes, and coordinate numbers', '显示全部 {n} 片': 'Show all {n} pieces',
+    '原开口': 'Source opening', '有效面积 mm²': 'Effective area mm²', '相对 u / %': 'Relative u / %', '公式 / 说明': 'Formula / notes',
+    '活性区域 {n}': 'Active region {n}', '开口 {n}': 'Opening {n}', '_活性区域有效面积不确定度.csv': '_active-region-area-uncertainty.csv',
+    '已关闭': 'off', '{n} 个通光孔': '{n} through-holes', '缺少 ITO 区域': 'missing ITO area', '未标记活性区域': 'no active regions tagged',
+    '单格 {a} 个（活性 {b}，公共 {c}）': 'Cell {a} (active {b}, common {c})', '全板 {a} 个': 'Panel {a}',
+    '定位开口 {a} 个': 'Positioning openings {a}', '测试 mask {a}': 'Test mask {a}', '安装孔 掩模片 {a}，骨架 {b}': 'Mounting holes: foil {a}, frame {b}',
+    '单格 {a} 个，其中活性 {b} 个、公共电极 {c} 个、未标记 {d} 个；全板 {e} 个；掩模片加工开孔 {f} 个；骨架加工开孔 {g} 个。面积和不确定度只计算活性区域。': 'Cell {a} (active {b}, common {c}, untagged {d}); panel {e}; foil openings {f}; frame openings {g}. Area and uncertainty are computed only for active regions.',
+    ' 图案存在重叠，单格连通区域 {n} 个，请先处理重叠。': ' Overlaps detected; {n} connected cell regions. Please resolve overlaps first.',
+    '先选择要移动的对象': 'Select objects to move first',
+    '整体移动当前选中对象，保持相互间距。中心按外包框计算；会改变加工坐标，可撤销。': 'Moves all selected objects together, keeping their spacing. Center is based on the bounding box; changes manufacturing coordinates and is undoable.',
+    '设置整体中心': 'Set overall center', '选中整体中心 X / mm': 'Selection center X / mm', '选中整体中心 Y / mm': 'Selection center Y / mm',
+    '应用整体平移': 'Apply overall offset', '整体平移 ΔX / mm': 'Overall offset ΔX / mm', '整体平移 ΔY / mm': 'Overall offset ΔY / mm'
+  });
+  Object.assign(DICT['zh-Hant'], {
+    '文字': '文字', '已选中 {n} 个对象': '已選中 {n} 個對象', '隐藏': '隱藏', '显示': '顯示',
+    ' 10 mm 网格、中心轴和坐标数字': ' 10 mm 網格、中心軸和坐標數字', '显示全部 {n} 片': '顯示全部 {n} 片',
+    '原开口': '原開口', '有效面积 mm²': '有效面積 mm²', '相对 u / %': '相對 u / %', '公式 / 说明': '公式 / 說明',
+    '活性区域 {n}': '活性區域 {n}', '开口 {n}': '開口 {n}', '_活性区域有效面积不确定度.csv': '_活性區域有效面積不確定度.csv',
+    '已关闭': '已關閉', '{n} 个通光孔': '{n} 個通光孔', '缺少 ITO 区域': '缺少 ITO 區域', '未标记活性区域': '未標記活性區域',
+    '先选择要移动的对象': '先選擇要移動的對象', '设置整体中心': '設置整體中心',
+    '选中整体中心 X / mm': '選中整體中心 X / mm', '选中整体中心 Y / mm': '選中整體中心 Y / mm',
+    '应用整体平移': '應用整體平移', '整体平移 ΔX / mm': '整體平移 ΔX / mm', '整体平移 ΔY / mm': '整體平移 ΔY / mm'
+  });
+  Object.assign(DICT['zh-TW'], {
+    '文字': '文字', '已选中 {n} 个对象': '已選取 {n} 個物件', '隐藏': '隱藏', '显示': '顯示',
+    ' 10 mm 网格、中心轴和坐标数字': ' 10 mm 網格、中心軸和座標數字', '显示全部 {n} 片': '顯示全部 {n} 片',
+    '原开口': '原開口', '有效面积 mm²': '有效面積 mm²', '相对 u / %': '相對 u / %', '公式 / 说明': '公式 / 說明',
+    '活性区域 {n}': '活性區域 {n}', '开口 {n}': '開口 {n}', '_活性区域有效面积不确定度.csv': '_活性區域有效面積不確定度.csv',
+    '已关闭': '已關閉', '{n} 个通光孔': '{n} 個通光孔', '缺少 ITO 区域': '缺少 ITO 區域', '未标记活性区域': '未標記活性區域',
+    '先选择要移动的对象': '先選取要移動的物件', '设置整体中心': '設定整體中心',
+    '选中整体中心 X / mm': '選取整體中心 X / mm', '选中整体中心 Y / mm': '選取整體中心 Y / mm',
+    '应用整体平移': '套用整體平移', '整体平移 ΔX / mm': '整體平移 ΔX / mm', '整体平移 ΔY / mm': '整體平移 ΔY / mm'
+  });
+
   function t(s) {
     if (lang === 'zh-Hans' || s == null) return s;
     const d = DICT[lang];
     return (d && d[s]) || s;
+  }
+
+  // Parameterised: translate the template, then substitute {name} placeholders.
+  function tf(template, params) {
+    let s = t(template);
+    if (params) for (const k in params) s = s.split('{' + k + '}').join(params[k]);
+    return s;
   }
 
   // Translate static DOM once at load. Language changes reload the page, so no restore is needed.
@@ -158,12 +265,7 @@
     const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     const nodes = [];
     let n; while ((n = tw.nextNode())) nodes.push(n);
-    for (const node of nodes) {
-      const raw = node.nodeValue, key = raw && raw.trim();
-      if (!key) continue;
-      const tr = DICT[lang][key];
-      if (tr && tr !== key) node.nodeValue = raw.replace(key, tr);
-    }
+    for (const node of nodes) translateText(node);
     for (const attr of ['title', 'aria-label', 'placeholder']) {
       for (const el of root.querySelectorAll('[' + attr + ']')) {
         const tr = DICT[lang][el.getAttribute(attr)];
@@ -171,6 +273,32 @@
       }
     }
     if (root === document) document.documentElement.lang = lang;
+  }
+
+  function translateText(node) {
+    const raw = node.nodeValue, key = raw && raw.trim();
+    if (!key) return;
+    const tr = DICT[lang][key];
+    if (tr && tr !== key) node.nodeValue = raw.replace(key, tr);
+  }
+
+  // Auto-translate JS-rendered dynamic content.
+  let observer = null;
+  function startObserver() {
+    if (lang === 'zh-Hans' || typeof MutationObserver === 'undefined' || !document.body) return;
+    observer = new MutationObserver(muts => {
+      observer.disconnect();
+      try {
+        for (const m of muts) {
+          if (m.type === 'characterData') { translateText(m.target); continue; }
+          for (const n of m.addedNodes) {
+            if (n.nodeType === 3) translateText(n);
+            else if (n.nodeType === 1) apply(n);
+          }
+        }
+      } finally { observer.observe(document.body, { subtree: true, childList: true, characterData: true }); }
+    });
+    observer.observe(document.body, { subtree: true, childList: true, characterData: true });
   }
 
   function setLang(next) {
@@ -196,7 +324,8 @@
 
   function getLang() { return lang; }
 
-  window.I18N = { t, apply, setLang, getLang, SUPPORTED, LABELS };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { mountSwitcher(); apply(document); });
-  else { mountSwitcher(); apply(document); }
+  window.I18N = { t, tf, apply, setLang, getLang, SUPPORTED, LABELS };
+  window.T = t; window.TF = tf;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { mountSwitcher(); apply(document); startObserver(); });
+  else { mountSwitcher(); apply(document); startObserver(); }
 })();
