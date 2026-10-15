@@ -7,6 +7,7 @@ datas=[(str(root/'index.html'),'图案开口设计器'),
        (str(root/'canvas-controls.js'),'图案开口设计器'),
        (str(root/'static-api.js'),'图案开口设计器'),
        (str(root/'pyodide.js'),'图案开口设计器'),
+       (str(root/'i18n.js'),'图案开口设计器'),
        (str(root/'default_project.json'),'图案开口设计器'),
        (str(repo/'ohm-mask-skill/scripts/make_mask.py'),'ohm-mask-skill/scripts')]
 a=Analysis([str(root/'browser_app.py')],pathex=[str(root)],datas=datas,
