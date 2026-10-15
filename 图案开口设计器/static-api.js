@@ -57,7 +57,7 @@
       if (!window.loadPyodide) await loadScript(new URL('pyodide.js', assetBase));
       const pyodide = await window.loadPyodide({indexURL: pyodideBase});
       await pyodide.loadPackage(['shapely', 'matplotlib']);
-      const names = ['make_mask.py', 'manufacturing.py', 'area_statistics.py', 'web_bridge.py'];
+      const names = ['make_mask.py', 'manufacturing.py', 'area_statistics.py', 'web_bridge.py', 'loc.py'];
       const sources = await Promise.all(names.map(name => textAsset(name)));
       names.forEach((name, index) => pyodide.FS.writeFile(`/home/pyodide/${name}`, sources[index], {encoding: 'utf8'}));
       try {
