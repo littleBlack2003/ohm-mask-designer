@@ -27,7 +27,7 @@ dist/
 默认25mm基底/*加工图纸包*/
 默认25mm基底/*有效面积*.csv
 默认25mm基底/pixel有效面积.json
-pvd-shadow-mask/装配图_*
+ohm-mask-skill/装配图_*
 
 # Personal debug log (not part of the repo)
 调试记录.md

@@ -7,7 +7,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parent
-SCRIPTS = ROOT.parent / 'pvd-shadow-mask' / 'scripts'
+SCRIPTS = ROOT.parent / 'ohm-mask-skill' / 'scripts'
 sys.path.insert(0, str(ROOT))
 loader = importlib.util.spec_from_file_location('make_mask', SCRIPTS / 'make_mask.py')
 make_mask = importlib.util.module_from_spec(loader)

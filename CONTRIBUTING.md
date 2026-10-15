@@ -6,7 +6,7 @@
 
 ```powershell
 python -X utf8 -B -m unittest discover -s "图案开口设计器" -p "test_*.py"
-python -X utf8 -B -m unittest discover -s "pvd-shadow-mask/tests" -p "test_*.py"
+python -X utf8 -B -m unittest discover -s "ohm-mask-skill/tests" -p "test_*.py"
 node --check "图案开口设计器/static-api.js"
 ```
 

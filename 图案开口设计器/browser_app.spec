@@ -8,7 +8,7 @@ datas=[(str(root/'index.html'),'图案开口设计器'),
        (str(root/'static-api.js'),'图案开口设计器'),
        (str(root/'pyodide.js'),'图案开口设计器'),
        (str(root/'default_project.json'),'图案开口设计器'),
-       (str(repo/'pvd-shadow-mask/scripts/make_mask.py'),'pvd-shadow-mask/scripts')]
+       (str(repo/'ohm-mask-skill/scripts/make_mask.py'),'ohm-mask-skill/scripts')]
 a=Analysis([str(root/'browser_app.py')],pathex=[str(root)],datas=datas,
            hiddenimports=['matplotlib.font_manager','matplotlib.textpath'],
            hookspath=[],hooksconfig={'matplotlib':{'backends':['Agg']}},

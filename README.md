@@ -44,13 +44,13 @@ Windows 用户也可以双击 `图案开口设计器/启动设计器.cmd`。设�
 
 ```powershell
 python -X utf8 -B -m unittest discover -s "图案开口设计器" -p "test_*.py"
-python -X utf8 -B -m unittest discover -s "pvd-shadow-mask/tests" -p "test_*.py"
+python -X utf8 -B -m unittest discover -s "ohm-mask-skill/tests" -p "test_*.py"
 ```
 
 ## 目录
 
 - `图案开口设计器/`：浏览器 GUI、项目管理、统计、校验和加工导出。
-- `pvd-shadow-mask/`：Codex Skill、几何生成脚本、格式规范和示例。
+- `ohm-mask-skill/`：Codex Skill、几何生成脚本、格式规范和示例。
 - `默认25mm基底/`：可复现的示例项目配置。
 
 详细使用方法见 [`图案开口设计器/使用说明.md`](图案开口设计器/使用说明.md)。

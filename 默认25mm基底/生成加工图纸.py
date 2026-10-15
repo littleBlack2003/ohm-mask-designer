@@ -8,7 +8,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'加工图纸'
-loader=importlib.util.spec_from_file_location('mask',ROOT.parent/'pvd-shadow-mask/scripts/make_mask.py')
+loader=importlib.util.spec_from_file_location('mask',ROOT.parent/'ohm-mask-skill/scripts/make_mask.py')
 m=importlib.util.module_from_spec(loader);loader.loader.exec_module(m)
 spec=json.loads((ROOT/'图案开口设计草稿.json').read_text(encoding='utf-8'))
 spec['_stage']='加工图纸'

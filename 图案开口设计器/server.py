@@ -21,7 +21,7 @@ PROJECT = ROOT.parent / '默认25mm基底'
 SOURCE = PROJECT / '项目设置.json'
 DRAFT = PROJECT / '图案开口设计草稿.json'
 OUTPUT = PROJECT / '加工图纸'
-loader = importlib.util.spec_from_file_location('mask', ROOT.parent / 'pvd-shadow-mask/scripts/make_mask.py')
+loader = importlib.util.spec_from_file_location('mask', ROOT.parent / 'ohm-mask-skill/scripts/make_mask.py')
 m = importlib.util.module_from_spec(loader)
 loader.loader.exec_module(m)
 LOCK = threading.RLock()
