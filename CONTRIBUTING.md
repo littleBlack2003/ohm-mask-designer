@@ -1,5 +1,7 @@
 # 参与贡献
 
+[English](CONTRIBUTING.en.md) | **简体中文** | [繁體中文](CONTRIBUTING.zh-Hant.md)
+
 欢迎提交 Issue 或 Pull Request，反馈问题、改进文档或扩展掩模设计与加工导出功能。
 
 提交代码前，请运行：
