@@ -245,6 +245,42 @@
     '应用整体平移': '套用整體平移', '整体平移 ΔX / mm': '整體平移 ΔX / mm', '整体平移 ΔY / mm': '整體平移 ΔY / mm'
   });
 
+  // Phase 2c: project-ui dynamic labels.
+  Object.assign(DICT.en, {
+    '基板 ': 'Substrate ', '掩模片 ': 'Mask foil ', '（独立外形）': ' (independent outline)', '（跟随骨架）': ' (follows frame)',
+    '骨架 ': 'Frame ', '，总外形 ': ' — overall outline ', '阵列 {a}×{b}，中心距 {c}×{d}': 'Array {a}×{b}, pitch {c}×{d}',
+    '定位开口 {n} 个': '{n} positioning openings', '把手 {list}': 'Handle {list}', '取片缺口 {v}': 'Pick notch {v}',
+    '{n} 个，R{list}': '{n}, R{list}', '无': 'none', '安装孔 {v}': 'Mounting holes {v}', '已设置': 'set',
+    '测试 mask {v}': 'Test mask {v}', '{p}% 边长，{s} mm 吸附': '{p}% edge, {s} mm snap', '；': '; ',
+    '主体 {a}，{b} 个定位开口': 'Body {a}, {b} positioning openings', '独立外形 {a}': 'Independent outline {a}',
+    '自动生成已关闭': 'Auto-generation off', '暂不能生成：{e}': 'Cannot generate yet: {e}',
+    '{n} 个通光孔，{p}% 边长，{s} mm 吸附': '{n} through-holes, {p}% edge, {s} mm snap',
+    '请检查{label}': 'Check {label}', '开口按基板 {a} 加总旷量生成。': 'Openings are generated from substrate {a} plus the total clearance.',
+    '保存位置：{d}': 'Location: {d}', '{n} 个定位开口': '{n} positioning openings', '（当前）': ' (current)',
+    '已打开': 'Open', '打开': 'Open', '新建掩模项目': 'New mask project', '{name} 副本': '{name} copy',
+    '请输入项目名称': 'Enter a project name', '请选择完整蒸镀总成项目JSON': 'Select a complete evaporation-assembly project JSON',
+    '本地工作台已结束，可以关闭此页面。': 'The local workbench has shut down; you can close this page.',
+    '已保存外框设置': 'Frame settings saved', '外框设置已应用并保存': 'Frame settings applied and saved'
+  });
+  Object.assign(DICT['zh-Hant'], {
+    '（独立外形）': '（獨立外形）', '（跟随骨架）': '（跟隨骨架）', '定位开口 {n} 个': '定位開口 {n} 個',
+    '把手 {list}': '把手 {list}', '取片缺口 {v}': '取片缺口 {v}', '无': '無', '已设置': '已設置',
+    '自动生成已关闭': '自動生成已關閉', '暂不能生成：{e}': '暫不能生成：{e}', '请检查{label}': '請檢查{label}',
+    '保存位置：{d}': '保存位置：{d}', '（当前）': '（當前）', '已打开': '已打開', '打开': '打開',
+    '新建掩模项目': '新建掩模項目', '{name} 副本': '{name} 副本', '请输入项目名称': '請輸入項目名稱',
+    '本地工作台已结束，可以关闭此页面。': '本地工作檯已結束，可以關閉此頁面。',
+    '已保存外框设置': '已保存外框設置', '外框设置已应用并保存': '外框設置已應用並保存'
+  });
+  Object.assign(DICT['zh-TW'], {
+    '（独立外形）': '（獨立外形）', '（跟随骨架）': '（跟隨骨架）', '定位开口 {n} 个': '定位開口 {n} 個',
+    '把手 {list}': '把手 {list}', '取片缺口 {v}': '取片缺口 {v}', '无': '無', '已设置': '已設定',
+    '自动生成已关闭': '自動生成已關閉', '暂不能生成：{e}': '暫不能產生：{e}', '请检查{label}': '請檢查{label}',
+    '保存位置：{d}': '儲存位置：{d}', '（当前）': '（目前）', '已打开': '已開啟', '打开': '開啟',
+    '新建掩模项目': '新建掩模專案', '{name} 副本': '{name} 副本', '请输入项目名称': '請輸入專案名稱',
+    '本地工作台已结束，可以关闭此页面。': '本機工作台已結束，可以關閉此頁面。',
+    '已保存外框设置': '已儲存外框設定', '外框设置已应用并保存': '外框設定已套用並儲存'
+  });
+
   function t(s) {
     if (lang === 'zh-Hans' || s == null) return s;
     const d = DICT[lang];
