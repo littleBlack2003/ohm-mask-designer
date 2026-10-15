@@ -1,6 +1,6 @@
 {
   "kind": "evaporation",
-  "name": "默认25mm基底",
+  "name": "欧姆稳定性镀膜案例",
   "_stage": "GUI图案设计",
   "clearance_mm": 0.2,
   "min_web_mm": 0.3,
@@ -9,8 +9,7 @@
   "substrate": {
     "type": "rect",
     "width": 25,
-    "height": 25,
-    "corner_radius": 0
+    "height": 25
   },
   "skeleton": {
     "outline": {
@@ -56,8 +55,7 @@
         "origin": [
           -5,
           -7
-        ],
-        "region_role": "active"
+        ]
       },
       {
         "type": "rect_array",
@@ -71,8 +69,7 @@
         "origin": [
           0,
           -7
-        ],
-        "region_role": "active"
+        ]
       },
       {
         "type": "rect_array",
@@ -86,8 +83,7 @@
         "origin": [
           5,
           -7
-        ],
-        "region_role": "active"
+        ]
       },
       {
         "type": "rect_array",
@@ -101,8 +97,7 @@
         "origin": [
           -5,
           7
-        ],
-        "region_role": "active"
+        ]
       },
       {
         "type": "rect_array",
@@ -116,8 +111,7 @@
         "origin": [
           0,
           7
-        ],
-        "region_role": "active"
+        ]
       },
       {
         "type": "rect_array",
@@ -131,8 +125,7 @@
         "origin": [
           5,
           7
-        ],
-        "region_role": "active"
+        ]
       },
       {
         "type": "rect_array",
@@ -146,8 +139,7 @@
         "origin": [
           -10.5,
           0
-        ],
-        "region_role": "common"
+        ]
       },
       {
         "type": "rect_array",
@@ -161,52 +153,8 @@
         "origin": [
           10.5,
           0
-        ],
-        "region_role": "common"
-      }
-    ]
-  },
-  "ito_effective": {
-    "features": [
-      {
-        "type": "rect_array",
-        "width": 25,
-        "height": 10,
-        "angle": 0,
-        "nx": 1,
-        "ny": 1,
-        "pitch_x": 0,
-        "pitch_y": 0,
-        "origin": [
-          0,
-          0
         ]
       }
     ]
-  },
-  "laser_marking": [
-    {
-      "text": "2026年10月12日 JM",
-      "height": 4,
-      "center": [
-        -0.2,
-        126.4
-      ],
-      "angle": 180,
-      "target": "skeleton"
-    }
-  ],
-  "uncertainty_settings": {
-    "distribution": "uniform",
-    "aperture_mm": 0.01,
-    "ito_mm": 0.0,
-    "registration_x_mm": 0.0,
-    "registration_y_mm": 0.0
-  },
-  "test_mask": {
-    "enabled": true,
-    "aperture_scale": 0.8,
-    "size_snap_mm": 0.1,
-    "edge_margin_mm": 0.3
   }
 }
