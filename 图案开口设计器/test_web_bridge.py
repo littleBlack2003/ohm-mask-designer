@@ -54,6 +54,32 @@ class WebBridgeTests(unittest.TestCase):
         self.assertEqual(len(preview['holes']),1)
         self.assertIsNone(preview['error'])
 
+    def test_english_error_report_and_generated_names(self):
+        feature={'type':'rect_array','width':2,'height':4,'nx':1,'ny':1,
+                 'pitch_x':0,'pitch_y':0,'origin':[0,0],'region_role':'active'}
+        missing=json.loads(bridge.call('statistics',json.dumps({
+            'features':[feature],'ito_features':[],'lang':'en'})))
+        self.assertEqual(missing['status'],422)
+        self.assertEqual(missing['body']['error'],
+                         'Draw the ITO effective area first; without ITO the whole substrate is not assumed effective')
+
+        generated=json.loads(bridge.call('generate',json.dumps({
+            'features':[feature],
+            'ito_features':[{'type':'rect_array','width':10,'height':10,'nx':1,'ny':1,
+                             'pitch_x':0,'pitch_y':0,'origin':[0,0]}],
+            'markings':[],'lang':'en'})))
+        self.assertEqual(generated['status'],200)
+        self.assertIn('geometry-validation-report.txt',generated['body']['files'])
+        self.assertTrue(any(name.endswith('_foil_cutting.dxf') for name in generated['body']['files']))
+        self.assertIn('Substrate size',generated['body']['report'])
+
+    def test_unsupported_language_falls_back_to_simplified_chinese(self):
+        result=json.loads(bridge.call('statistics',json.dumps({
+            'features':[{'type':'circle','diameter':2,'region_role':'active'}],
+            'ito_features':[],'lang':'fr'})))
+        self.assertEqual(result['status'],422)
+        self.assertIn('请先绘制ITO有效区域',result['body']['error'])
+
 
 if __name__ == '__main__':
     unittest.main()

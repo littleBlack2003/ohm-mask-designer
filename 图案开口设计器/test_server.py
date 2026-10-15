@@ -17,17 +17,18 @@ class EditorTests(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory(prefix='mask-editor-test-')
         root=Path(self.temp.name)
-        self.old=(s.SOURCE,s.DRAFT,s.OUTPUT,s.LIBRARY,s.DEFAULT_SOURCE)
+        self.old=(s.PROJECT,s.SOURCE,s.DRAFT,s.OUTPUT,s.LIBRARY,s.DEFAULT_SOURCE)
         s.SOURCE=root/'项目设置.json';s.DRAFT=root/'图案开口设计草稿.json';s.OUTPUT=root/'output'
         s.LIBRARY=root/'projects';s.DEFAULT_SOURCE=s.SOURCE
-        s.SOURCE.write_text(self.old[0].read_text(encoding='utf-8'),encoding='utf-8')
+        s.PROJECT=root
+        s.SOURCE.write_text(self.old[1].read_text(encoding='utf-8'),encoding='utf-8')
         self.server=s.ThreadingHTTPServer(('127.0.0.1',0),s.Handler)
         self.thread=threading.Thread(target=self.server.serve_forever,daemon=True);self.thread.start()
         self.url=f'http://127.0.0.1:{self.server.server_port}'
 
     def tearDown(self):
         self.server.shutdown();self.server.server_close();self.thread.join()
-        s.SOURCE,s.DRAFT,s.OUTPUT,s.LIBRARY,s.DEFAULT_SOURCE=self.old
+        s.PROJECT,s.SOURCE,s.DRAFT,s.OUTPUT,s.LIBRARY,s.DEFAULT_SOURCE=self.old
         self.temp.cleanup()
 
     def post(self,route,features,ito_features=None,markings=None,uncertainty=None,extra=None):
@@ -239,6 +240,16 @@ class EditorTests(unittest.TestCase):
         self.assertEqual(self.post('project-open',[],extra={'id':original_key})[0],200)
         self.assertEqual(s.SOURCE.read_bytes(),original)
         self.assertEqual(s.project_key(),original_key)
+
+    def test_bundled_starter_is_seeded_for_source_and_portable_launches(self):
+        target=s.seed_default_project()
+        self.assertEqual(target,s.LIBRARY/'欧姆稳定性镀膜案例'/'项目.json')
+        self.assertEqual(s.initial()['name'],'欧姆稳定性镀膜案例')
+        self.assertEqual(len(s.initial()['foil']['cell']),8)
+        self.assertNotIn('ito_effective',s.initial())
+        before=target.read_bytes()
+        self.assertEqual(s.seed_default_project(),target)
+        self.assertEqual(target.read_bytes(),before)
 
     def test_saved_layout_survives_reload(self):
         settings=s.initial();settings['name']='布局修改'

@@ -283,22 +283,115 @@
 
   // Phase 2d: frame-properties pick-notch fields.
   Object.assign(DICT.en, {
-    '取片缺口位置': 'Pick-notch position', '取片缺口 R / mm': 'Pick-notch R / mm', '取片缺口内缩 / mm': 'Pick-notch inset / mm',
+    '取片缺口': 'Pick notch', '取片缺口位置': 'Pick-notch position', '取片缺口 R / mm': 'Pick-notch R / mm', '取片缺口内缩 / mm': 'Pick-notch inset / mm',
     '边上缺口偏移 / mm': 'Edge-notch offset / mm', '右上角': 'Top-right', '左上角': 'Top-left', '右下角': 'Bottom-right', '左下角': 'Bottom-left'
   });
   Object.assign(DICT['zh-Hant'], {
-    '取片缺口位置': '取片缺口位置', '取片缺口 R / mm': '取片缺口 R / mm', '取片缺口内缩 / mm': '取片缺口內縮 / mm',
+    '取片缺口': '取片缺口', '取片缺口位置': '取片缺口位置', '取片缺口 R / mm': '取片缺口 R / mm', '取片缺口内缩 / mm': '取片缺口內縮 / mm',
     '边上缺口偏移 / mm': '邊上缺口偏移 / mm', '右上角': '右上角', '左上角': '左上角', '右下角': '右下角', '左下角': '左下角'
   });
   Object.assign(DICT['zh-TW'], {
-    '取片缺口位置': '取片缺口位置', '取片缺口 R / mm': '取片缺口 R / mm', '取片缺口内缩 / mm': '取片缺口內縮 / mm',
+    '取片缺口': '取片缺口', '取片缺口位置': '取片缺口位置', '取片缺口 R / mm': '取片缺口 R / mm', '取片缺口内缩 / mm': '取片缺口內縮 / mm',
     '边上缺口偏移 / mm': '邊上缺口偏移 / mm', '右上角': '右上角', '左上角': '左上角', '右下角': '右下角', '左下角': '左下角'
   });
+
+  // Phase 2e: canvas captions, empty states, test-mask controls and layout pages.
+  Object.assign(DICT.en, {
+    '{n} 个': '{n} items', '{n}点': '{n} points', '{w}×{h} mm 基片': '{w}×{h} mm substrate',
+    'Ø{d} mm 基片': 'Ø{d} mm substrate', '虚线：{w}×{h} mm 定位开口边界': 'Dashed: {w}×{h} mm positioning-opening boundary',
+    '虚线：Ø{d} mm 定位开口边界': 'Dashed: Ø{d} mm positioning-opening boundary',
+    '选择工具后在画布上绘制。': 'Choose a tool, then draw on the canvas.',
+    '选择图形后修改参数。按 Shift 可多选。': 'Select a shape to edit; hold Shift for multiple selection.',
+    '点击“添加文字”创建打标，或选择已有文字。': 'Click “Add text” to create a marking, or select existing text.',
+    '吸附': 'Snapping', '外框打标（全板坐标）': 'Outline marking (whole-panel coordinates)',
+    '{n} 片总成': '{n}-piece assembly', '总成预览为只读视图。': 'Assembly preview is read-only.',
+    '应用': 'Apply', '测试 mask': 'Test mask', '自动生成测试 mask': 'Auto-generate test mask',
+    '通光孔边长比例 / %': 'Through-hole edge scale / %', '通光孔尺寸吸附 / mm': 'Through-hole size snap / mm',
+    '尺寸吸附 / mm': 'Size snap / mm', '外框边缘余量 / mm': 'Outline edge margin / mm',
+    'mask 外形': 'Mask outline', '跟随基板': 'Follow substrate',
+    '基本信息': 'Basic information', '基板': 'Substrate', '定位开口与图案阵列': 'Positioning openings & pattern array',
+    '高级设置': 'Advanced', '基板形状': 'Substrate shape', '基板宽度 / mm': 'Substrate width / mm',
+    '基板高度 / mm': 'Substrate height / mm', '基板直径 / mm': 'Substrate diameter / mm',
+    '基板圆角 R / mm': 'Substrate corner R / mm', '骨架主体宽度 / mm': 'Frame body width / mm',
+    '骨架主体高度 / mm': 'Frame body height / mm', '骨架外框圆角 R / mm': 'Frame outline corner R / mm',
+    '安装孔（可选）': 'Mounting holes (optional)', '两片': 'Both pieces', '安装孔直径 / mm': 'Mounting-hole diameter / mm',
+    '四角安装孔内缩 / mm': 'Corner mounting-hole inset / mm', '最小筋宽要求 / mm': 'Minimum web requirement / mm',
+    '图案阵列列数': 'Pattern-array columns', '图案阵列行数': 'Pattern-array rows',
+    '掩模片外形模式': 'Mask-foil outline mode', '掩模片宽度 / mm': 'Mask-foil width / mm',
+    '掩模片高度 / mm': 'Mask-foil height / mm', '掩模片直径 / mm': 'Mask-foil diameter / mm',
+    '掩模片圆角 R / mm': 'Mask-foil corner R / mm', '每格复制图案': 'Repeat pattern per cell',
+    '当前骨架使用高级轮廓、多个把手或自定义定位开口，请在完整设置的高级 JSON 中编辑。': 'This frame uses an advanced outline, multiple handles, or custom positioning openings. Edit it in Advanced JSON under Full settings.',
+    '当前掩模片使用高级自定义轮廓，请在完整板件设置的高级 JSON 中编辑。': 'This mask foil uses an advanced custom outline. Edit it in Advanced JSON under Full settings.',
+    '当前测试 mask 使用高级自定义轮廓，请在完整板件设置的高级 JSON 中编辑。': 'This test mask uses an advanced custom outline. Edit it in Advanced JSON under Full settings.'
+  });
+  Object.assign(DICT['zh-Hant'], {
+    '{n} 个': '{n} 個', '{n}点': '{n} 點', '{w}×{h} mm 基片': '{w}×{h} mm 基片', 'Ø{d} mm 基片': 'Ø{d} mm 基片',
+    '虚线：{w}×{h} mm 定位开口边界': '虛線：{w}×{h} mm 定位開口邊界', '虚线：Ø{d} mm 定位开口边界': '虛線：Ø{d} mm 定位開口邊界',
+    '选择工具后在画布上绘制。': '選擇工具後在畫布上繪製。', '选择图形后修改参数。按 Shift 可多选。': '選擇圖形後修改參數。按 Shift 可多選。',
+    '选择图形后拖动，参数在右侧修改。': '選擇圖形後拖動，參數在右側修改。', '按 Shift 多选，滚轮缩放': '按 Shift 多選，滾輪縮放',
+    '点击“添加文字”创建打标，或选择已有文字。': '點擊「添加文字」創建打標，或選擇已有文字。',
+    '吸附': '吸附', '外框打标（全板坐标）': '外框打標（全板坐標）', '{n} 片总成': '{n} 片總成',
+    '总成预览为只读视图。': '總成預覽為唯讀視圖。', '应用': '應用', '测试 mask': '測試 mask',
+    '自动生成测试 mask': '自動生成測試 mask', '通光孔边长比例 / %': '通光孔邊長比例 / %',
+    '通光孔尺寸吸附 / mm': '通光孔尺寸吸附 / mm', '尺寸吸附 / mm': '尺寸吸附 / mm',
+    '外框边缘余量 / mm': '外框邊緣餘量 / mm', 'mask 外形': 'mask 外形', '跟随基板': '跟隨基板',
+    '基本信息': '基本信息', '基板': '基板', '定位开口与图案阵列': '定位開口與圖案陣列', '高级设置': '高級設置',
+    '基板形状': '基板形狀', '基板宽度 / mm': '基板寬度 / mm', '基板高度 / mm': '基板高度 / mm',
+    '基板直径 / mm': '基板直徑 / mm', '基板圆角 R / mm': '基板圓角 R / mm',
+    '骨架主体宽度 / mm': '骨架主體寬度 / mm', '骨架主体高度 / mm': '骨架主體高度 / mm',
+    '骨架外框圆角 R / mm': '骨架外框圓角 R / mm', '安装孔（可选）': '安裝孔（可選）',
+    '两片': '兩片', '安装孔直径 / mm': '安裝孔直徑 / mm', '四角安装孔内缩 / mm': '四角安裝孔內縮 / mm',
+    '最小筋宽要求 / mm': '最小筋寬要求 / mm', '图案阵列列数': '圖案陣列列數', '图案阵列行数': '圖案陣列行數',
+    '掩模片外形模式': '掩模片外形模式', '掩模片宽度 / mm': '掩模片寬度 / mm',
+    '掩模片高度 / mm': '掩模片高度 / mm', '掩模片直径 / mm': '掩模片直徑 / mm',
+    '掩模片圆角 R / mm': '掩模片圓角 R / mm', '每格复制图案': '每格複製圖案'
+  });
+  Object.assign(DICT['zh-TW'], {
+    '{n} 个': '{n} 個', '{n}点': '{n} 點', '{w}×{h} mm 基片': '{w}×{h} mm 基板', 'Ø{d} mm 基片': 'Ø{d} mm 基板',
+    '虚线：{w}×{h} mm 定位开口边界': '虛線：{w}×{h} mm 定位開口邊界', '虚线：Ø{d} mm 定位开口边界': '虛線：Ø{d} mm 定位開口邊界',
+    '选择工具后在画布上绘制。': '選取工具後在畫布上繪製。', '选择图形后修改参数。按 Shift 可多选。': '選取圖形後修改參數。按 Shift 可多選。',
+    '选择图形后拖动，参数在右侧修改。': '選取圖形後拖曳，參數在右側修改。', '按 Shift 多选，滚轮缩放': '按 Shift 多選，滾輪縮放',
+    '点击“添加文字”创建打标，或选择已有文字。': '點選「新增文字」建立打標，或選取已有文字。',
+    '吸附': '吸附', '外框打标（全板坐标）': '外框打標（全板座標）', '{n} 片总成': '{n} 片總成',
+    '总成预览为只读视图。': '總成預覽為唯讀檢視。', '应用': '套用', '测试 mask': '測試 mask',
+    '自动生成测试 mask': '自動產生測試 mask', '通光孔边长比例 / %': '通光孔邊長比例 / %',
+    '通光孔尺寸吸附 / mm': '通光孔尺寸吸附 / mm', '尺寸吸附 / mm': '尺寸吸附 / mm',
+    '外框边缘余量 / mm': '外框邊緣餘量 / mm', 'mask 外形': 'mask 外形', '跟随基板': '跟隨基板',
+    '基本信息': '基本資訊', '基板': '基板', '定位开口与图案阵列': '定位開口與圖案陣列', '高级设置': '進階設定',
+    '基板形状': '基板形狀', '基板宽度 / mm': '基板寬度 / mm', '基板高度 / mm': '基板高度 / mm',
+    '基板直径 / mm': '基板直徑 / mm', '基板圆角 R / mm': '基板圓角 R / mm',
+    '骨架主体宽度 / mm': '骨架主體寬度 / mm', '骨架主体高度 / mm': '骨架主體高度 / mm',
+    '骨架外框圆角 R / mm': '骨架外框圓角 R / mm', '安装孔（可选）': '安裝孔（選用）',
+    '两片': '兩片', '安装孔直径 / mm': '安裝孔直徑 / mm', '四角安装孔内缩 / mm': '四角安裝孔內縮 / mm',
+    '最小筋宽要求 / mm': '最小筋寬需求 / mm', '图案阵列列数': '圖案陣列欄數', '图案阵列行数': '圖案陣列列數',
+    '掩模片外形模式': '掩模片外形模式', '掩模片宽度 / mm': '掩模片寬度 / mm',
+    '掩模片高度 / mm': '掩模片高度 / mm', '掩模片直径 / mm': '掩模片直徑 / mm',
+    '掩模片圆角 R / mm': '掩模片圓角 R / mm', '每格复制图案': '每格複製圖案'
+  });
+
+  // A conservative Simplified-to-Traditional fallback for known UI keys.
+  // It never touches project names or user-entered text because only strings
+  // present in the English source-key table are eligible.
+  const SOURCE_KEYS = new Set(Object.keys(DICT.en));
+  const S2T = {
+    '欧':'歐','稳':'穩','镀':'鍍','简':'簡','项':'項','设':'設','载':'載','导':'導','发':'發','应':'應','用':'用','单':'單','滚':'滾',
+    '图':'圖','开':'開','区':'區','绘':'繪','圆':'圓','长':'長','边':'邊','选':'選','择':'擇','动':'動','参':'參',
+    '数':'數','侧':'側','复':'複','制':'製','对':'對','象':'象','删':'刪','网':'網','显':'顯','轴':'軸','标':'標',
+    '统':'統','计':'計','属':'屬','阵':'陣','验':'驗','个':'個','总':'總','预':'預','览':'覽',
+    '闭':'閉','误':'誤','输':'輸','准':'準','确':'確','说':'說','结':'結','页':'頁',
+    '义':'義','级':'級','储':'儲','录':'錄','创':'創','称':'稱','内':'內','当':'當',
+    '体':'體','宽':'寬','高':'高','径':'徑','转':'轉','顶':'頂','底':'底','旷':'曠','起':'起','点':'點','与':'與',
+    '独':'獨','随':'隨','测':'測','试':'試','缘':'緣','余':'餘','两':'兩','装':'裝','缩':'縮',
+    '这':'這','里':'裡','编':'編','码':'碼','请':'請','进':'進','会':'會','过':'過',
+    '无':'無','现':'現','报':'報','错':'錯','处':'處','后':'後','时':'時','仅':'僅','线':'線','块':'塊','关':'關',
+    '启':'啟','构':'構','层':'層','读':'讀','视':'視','从':'從','产':'產','间':'間','并':'並','变':'變','达':'達'
+  };
+  function trad(s) { return [...s].map(ch => S2T[ch] || ch).join(''); }
 
   function t(s) {
     if (lang === 'zh-Hans' || s == null) return s;
     const d = DICT[lang];
-    return (d && d[s]) || s;
+    return (d && d[s]) || (((lang === 'zh-Hant' || lang === 'zh-TW') && SOURCE_KEYS.has(s)) ? trad(s) : s);
   }
 
   // Parameterised: translate the template, then substitute {name} placeholders.
@@ -318,8 +411,8 @@
     for (const node of nodes) translateText(node);
     for (const attr of ['title', 'aria-label', 'placeholder']) {
       for (const el of root.querySelectorAll('[' + attr + ']')) {
-        const tr = DICT[lang][el.getAttribute(attr)];
-        if (tr) el.setAttribute(attr, tr);
+        const raw = el.getAttribute(attr), tr = t(raw);
+        if (tr && tr !== raw) el.setAttribute(attr, tr);
       }
     }
     if (root === document) document.documentElement.lang = lang;
@@ -328,7 +421,7 @@
   function translateText(node) {
     const raw = node.nodeValue, key = raw && raw.trim();
     if (!key) return;
-    const tr = DICT[lang][key];
+    const tr = t(key);
     if (tr && tr !== key) node.nodeValue = raw.replace(key, tr);
   }
 

@@ -28,7 +28,7 @@ loader.loader.exec_module(m)
 LOCK = threading.RLock()
 DEFAULT_SOURCE = SOURCE
 LIBRARY = ROOT.parent / '掩模项目'
-APP_VERSION = '0.9.5'
+APP_VERSION = '0.9.6'
 STOP_SERVER = None
 
 def initial():
@@ -59,6 +59,17 @@ def configure_project(path):
         DRAFT=PROJECT/'图案开口设计草稿.json' if legacy else path
         OUTPUT=PROJECT/'加工图纸' if legacy or path.name=='项目.json' else PROJECT/(path.stem+'_加工图纸')
     return spec
+
+
+def seed_default_project():
+    """Create the bundled starter project in the writable project library."""
+    seed=json.loads((ROOT/'default_project.json').read_text(encoding='utf-8-sig'))
+    target=LIBRARY/seed['name']/'项目.json'
+    if not target.exists():
+        target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_text(json.dumps(seed,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    configure_project(target)
+    return target
 
 
 
@@ -338,6 +349,7 @@ if __name__=='__main__':
     args=parser.parse_args()
     if args.library:LIBRARY=args.library.resolve()
     if args.project:configure_project(args.project);DEFAULT_SOURCE=SOURCE
+    else:DEFAULT_SOURCE=seed_default_project()
     restore_project()
     server=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
     STOP_SERVER=server.shutdown

@@ -11,7 +11,7 @@ import make_mask as m
 import manufacturing
 
 
-APP_VERSION = "0.9.5"
+APP_VERSION = "0.9.6"
 CURRENT_SPEC = {}
 
 
