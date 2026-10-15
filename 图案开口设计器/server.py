@@ -17,6 +17,7 @@ ROOT = Path(sys._MEIPASS) / '图案开口设计器' if getattr(sys,'frozen',Fals
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import manufacturing
 import area_statistics as area_stats
+import loc
 PROJECT = ROOT.parent / '默认25mm基底'
 SOURCE = PROJECT / '项目设置.json'
 DRAFT = PROJECT / '图案开口设计草稿.json'
@@ -284,11 +285,13 @@ class Handler(BaseHTTPRequestHandler):
         origin=self.headers.get('Origin')
         if origin and origin!=f'http://{self.headers.get("Host")}':
             self.send(403,{'error':'请求来源不匹配'});return
+        lang='zh-Hans'
         try:
             length=int(self.headers.get('Content-Length','0'))
             if not 0<length<=250000:raise ValueError('请求大小无效')
             body=json.loads(self.rfile.read(length))
             if not isinstance(body,dict):raise ValueError('请求须为JSON对象')
+            if isinstance(body.get('lang'),str) and body['lang'] in loc.SUPPORTED:lang=body['lang']
             with LOCK:
                 if body.get('project_key') and body['project_key']!=project_key():raise ValueError('当前项目已经切换，请刷新本页')
                 if path in ('/api/project-new','/api/project-copy','/api/project-open','/api/project-import'):
@@ -305,18 +308,19 @@ class Handler(BaseHTTPRequestHandler):
                     self.send(200,{'ok':True,'spec':spec,'frame':frame_geometry(spec)});return
                 report,valid=inspect_cell(spec,shapes)
                 if path=='/api/validate':
-                    self.send(200,{'ok':valid,'report':report,'shapes':shapes,'mark_paths':m.marking_preview(spec),
+                    self.send(200,{'ok':valid,'report':loc.report(report,lang),'shapes':shapes,'mark_paths':m.marking_preview(spec),
                                    'statistics':area_stats.nominal(spec,m),'frame':frame_geometry(spec)});return
                 if path=='/api/save':
                     with LOCK: save_document(spec)
-                    self.send(200,{'ok':True,'valid':valid,'report':report,'path':str(DRAFT)});return
+                    self.send(200,{'ok':True,'valid':valid,'report':loc.report(report,lang),'path':str(DRAFT)});return
                 if path=='/api/generate':
                     if not shapes:raise m.SpecError('请先绘制单格图案开口')
                     if not valid:
-                        self.send(422,{'error':'几何校验未通过，未生成DXF','report':report});return
+                        self.send(422,{'error':loc.message('几何校验未通过，未生成DXF',lang),'report':loc.report(report,lang)});return
                     report,files,spec=manufacturing.package(spec,m,area_stats)
                     if not files:
-                        self.send(422,{'error':'几何校验未通过，未生成DXF','report':report});return
+                        self.send(422,{'error':loc.message('几何校验未通过，未生成DXF',lang),'report':loc.report(report,lang)});return
+                    files={loc.filename(k,lang):v for k,v in files.items()}
                     with LOCK:
                         OUTPUT.mkdir(parents=True,exist_ok=True)
                         for filename,content in files.items():
@@ -324,10 +328,10 @@ class Handler(BaseHTTPRequestHandler):
                             if isinstance(content,bytes):file.write_bytes(content)
                             else:file.write_text(content,encoding='utf-8',newline='\n')
                         save_document(spec)
-                    self.send(200,{'ok':True,'report':report,'files':list(files),'path':str(OUTPUT)});return
+                    self.send(200,{'ok':True,'report':loc.report(report,lang),'files':list(files),'path':str(OUTPUT)});return
                 self.send(404,{'error':'操作不存在'})
         except (m.SpecError,ValueError,TypeError,KeyError,OverflowError,OSError) as e:
-            self.send(422,{'error':str(e)})
+            self.send(422,{'error':loc.message(str(e),lang)})
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--library',type=Path);parser.add_argument('--project',type=Path)

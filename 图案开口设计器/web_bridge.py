@@ -6,6 +6,7 @@ import math
 import re
 
 import area_statistics as area_stats
+import loc
 import make_mask as m
 import manufacturing
 
@@ -207,17 +208,17 @@ def _encoded_files(files):
     return result
 
 
-def _run(action, body):
+def _run(action, body, lang="zh-Hans"):
     if action == "project":
         validate_project(CURRENT_SPEC)
         return {
             "spec": CURRENT_SPEC,
             "frame": frame_geometry(CURRENT_SPEC),
-            "project_dir": "浏览器本地存储",
+            "project_dir": loc.message("浏览器本地存储", lang),
             "desktop": False,
             "version": APP_VERSION,
             "can_shutdown": False,
-            "project_file": "浏览器本地存储",
+            "project_file": loc.message("浏览器本地存储", lang),
         }
     spec, shapes = prepare(body)
     if action == "statistics":
@@ -228,41 +229,45 @@ def _run(action, body):
     if action == "validate":
         return {
             "ok": valid,
-            "report": report,
+            "report": loc.report(report, lang),
             "shapes": shapes,
             "mark_paths": m.marking_preview(spec),
             "statistics": area_stats.nominal(spec, m),
             "frame": frame_geometry(spec),
         }
     if action == "save":
-        return {"ok": True, "valid": valid, "report": report, "path": "浏览器本地存储", "_spec": spec}
+        return {"ok": True, "valid": valid, "report": loc.report(report, lang), "path": loc.message("浏览器本地存储", lang), "_spec": spec}
     if action == "generate":
         if not shapes:
             raise m.SpecError("请先绘制单格图案开口")
         if not valid:
-            return {"_status": 422, "error": "几何校验未通过，未生成DXF", "report": report}
+            return {"_status": 422, "error": loc.message("几何校验未通过，未生成DXF", lang), "report": loc.report(report, lang)}
         report, files, result_spec = manufacturing.package(spec, m, area_stats)
         if not files:
-            return {"_status": 422, "error": "几何校验未通过，未生成DXF", "report": report}
+            return {"_status": 422, "error": loc.message("几何校验未通过，未生成DXF", lang), "report": loc.report(report, lang)}
+        files = {loc.filename(k, lang): v for k, v in files.items()}
         return {
             "ok": True,
-            "report": report,
+            "report": loc.report(report, lang),
             "files": list(files),
             "_blobs": _encoded_files(files),
             "_spec": result_spec,
-            "path": "浏览器下载",
+            "path": loc.message("浏览器下载", lang),
         }
     raise ValueError("操作不存在")
 
 
 def call(action, body_text="{}"):
+    lang = "zh-Hans"
     try:
         body = json.loads(body_text or "{}")
         if not isinstance(body, dict):
             raise ValueError("请求须为JSON对象")
-        result = _run(action, body)
+        if isinstance(body.get("lang"), str) and body["lang"] in loc.SUPPORTED:
+            lang = body["lang"]
+        result = _run(action, body, lang)
         status = int(result.pop("_status", 200))
         return json.dumps({"status": status, "body": result}, ensure_ascii=False)
     except (m.SpecError, ValueError, TypeError, KeyError, OverflowError, OSError) as exc:
-        return json.dumps({"status": 422, "body": {"error": str(exc)}}, ensure_ascii=False)
+        return json.dumps({"status": 422, "body": {"error": loc.message(str(exc), lang)}}, ensure_ascii=False)
 

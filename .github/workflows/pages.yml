@@ -33,6 +33,7 @@ jobs:
           cp "图案开口设计器/pyodide.js" _site/
           cp "图案开口设计器/i18n.js" _site/
           cp "图案开口设计器/web_bridge.py" _site/
+          cp "图案开口设计器/loc.py" _site/
           cp "图案开口设计器/manufacturing.py" _site/
           cp "图案开口设计器/area_statistics.py" _site/
           cp "图案开口设计器/default_project.json" _site/
