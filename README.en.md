@@ -57,6 +57,10 @@ python -X utf8 -B -m unittest discover -s "ohm-mask-skill/tests" -p "test_*.py"
 
 See [`图案开口设计器/使用说明.md`](图案开口设计器/使用说明.md) for detailed usage.
 
+## Credits
+
+The design, implementation, and documentation of this project were produced with contributions from **DeepSeek V4.1 Flash** and **GPT 6.1 Sol**, covering the mask-geometry algorithms, the browser workbench, the four-language documentation, and the packaged release.
+
 ## License & Contact
 
 This project is initiated and maintained by **Wuhan Ohm Technology Co., Ltd.** and released under the [Apache License 2.0](LICENSE) with no additional restrictions. Use, modification, distribution, and contributions are welcome. Please read the [contributing guide](CONTRIBUTING.md) before submitting code.

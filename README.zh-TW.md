@@ -60,6 +60,10 @@ python -X utf8 -B -m unittest discover -s "ohm-mask-skill/tests" -p "test_*.py"
 
 詳細使用方法見 [`图案开口设计器/使用说明.md`](图案开口设计器/使用说明.md)。
 
+## 貢獻致謝
+
+本專案的設計、實作與文件由 **DeepSeek V4.1 Flash** 與 **GPT 6.1 Sol** 協作貢獻完成，涵蓋掩模幾何演算法、瀏覽器工作台、四語文件與打包發行。
+
 ## 開源授權與聯絡
 
 本專案由**武漢歐姆科技有限公司**發起並維護，以 [Apache License 2.0](LICENSE) 開源，未附加額外授權限制。歡迎使用、修改、分發和參與貢獻。提交程式碼前請閱讀 [參與貢獻說明](CONTRIBUTING.md)。
