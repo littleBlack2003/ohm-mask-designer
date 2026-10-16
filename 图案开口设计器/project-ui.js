@@ -42,7 +42,6 @@ function drawPartCanvas(kind,g){
   drawCoordinateGrid(g,rawBounds(gridOutline),clip?[clip]:[]);
   for(const s of shapes.filter(x=>x.layer==='mask_outline'))renderShape(s,g,true);
   for(const s of shapes.filter(x=>x.layer==='mask'))renderShape(s,g,true);
-  if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(gridOutline),true)}
   $('canvas-label').textContent=T('测试 mask')+' · '+T('自主绘制');
   $('canvas-subtitle').textContent=TF('外形与通光孔自主绘制（{n} 个孔）',{n:shapes.filter(x=>x.layer==='mask').length});
   return;
