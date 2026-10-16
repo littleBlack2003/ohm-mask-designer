@@ -98,8 +98,6 @@ function partProperties(parent,kind){
  }
  heading('测试 mask');let config=project.test_mask||{},outline=config.outline;
  let manual=config.mode==='manual';
- fields([['mmode','生成方式',manual?'manual':'auto',{span:true,choices:{auto:'自动生成（活性区域∩ITO）',manual:'自主绘制（外形+通光孔）'}}]]);
- controls.mmode.onchange=()=>{project.test_mask={...(project.test_mask||{}),mode:controls.mmode.value==='manual'?'manual':'auto'};updateWorkspaceTools();draw();properties()};
  if(manual){
   parent.insertAdjacentHTML('beforeend','<p class="hint">自主绘制：切换到“mask”页，用绘图工具画出 mask 外形（一个）与通光孔（多个），再点下面应用。</p>');
   fields([['margin','外框边缘余量 / mm',config.edge_margin_mm??project.min_web_mm??.3,{min:0}]]);
