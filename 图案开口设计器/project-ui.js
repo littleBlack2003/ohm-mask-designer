@@ -36,7 +36,10 @@ function drawPartCanvas(kind,g){
  const config=project.test_mask||{};
  const gridOutline=tm.outline||frame.foil_outline||frame.outline;
  if(config.mode==='manual'){
-  if(tm.outline)rawShape(tm.outline,g,'#fff2af','#d4c77b',.08);
+  const outShape=shapes.find(x=>x.layer==='mask_outline');
+  let clip=null;if(outShape){if(outShape.type==='circle')clip=['circle',outShape.x,outShape.y,outShape.diameter/2];else if(outShape.type==='rect'){let hw=outShape.width/2,hh=outShape.height/2;clip=['poly',[[outShape.x-hw,outShape.y-hh],[outShape.x+hw,outShape.y-hh],[outShape.x+hw,outShape.y+hh],[outShape.x-hw,outShape.y+hh]]]}else if(outShape.type==='polygon')clip=['poly',outShape.points]}
+  if(!clip&&tm.outline)clip=tm.outline;
+  drawCoordinateGrid(g,rawBounds(gridOutline),clip?[clip]:[]);
   for(const s of shapes.filter(x=>x.layer==='mask_outline'))renderShape(s,g,true);
   for(const s of shapes.filter(x=>x.layer==='mask'))renderShape(s,g,true);
   if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(gridOutline),true)}
