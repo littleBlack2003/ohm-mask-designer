@@ -23,7 +23,7 @@ function zoomCamera(factor,event){
  if(!project)return;const c=camera(),base=fittedCamera(),ratio=c.w/base.w;
  factor=Math.max(.04,Math.min(20,ratio*factor))/ratio;
  const anchor=event?pAt(event,true):{x:c.x,y:c.y};
- c.x=anchor.x+(c.x-anchor.x)*factor;c.y=anchor.y+(c.y-anchor.y)*factor;c.w*=factor;c.h*=factor;applyCamera();
+ c.x=anchor.x+(c.x-anchor.x)*factor;c.y=anchor.y+(c.y-anchor.y)*factor;c.w*=factor;c.h*=factor;draw();
 }
 function endPan(){if(!panDrag)return;const id=panDrag.pointer;panDrag=null;if($('canvas').hasPointerCapture(id))$('canvas').releasePointerCapture(id);$('canvas').style.cursor=tool==='pan'?'grab':'default'}
 function translateSelection(dx,dy){
