@@ -2,7 +2,14 @@
 
 **English** | [简体中文](README.md) | [繁體中文](README.zh-Hant.md)
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/littleBlack2003/ohm-mask-designer?label=release&sort=semver)](https://github.com/littleBlack2003/ohm-mask-designer/releases/latest) [![Website](https://img.shields.io/website?url=https%3A%2F%2Flittleblack2003.github.io%2Fohm-mask-designer%2F&label=web%20app)](https://littleblack2003.github.io/ohm-mask-designer/) [![Deploy](https://github.com/littleBlack2003/ohm-mask-designer/actions/workflows/pages.yml/badge.svg)](https://github.com/littleBlack2003/ohm-mask-designer/actions/workflows/pages.yml) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Web-blue) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+| Item | Badge |
+| --- | --- |
+| License | [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) |
+| Latest release | [![Release](https://img.shields.io/github/v/release/littleBlack2003/ohm-mask-designer?label=release&sort=semver)](https://github.com/littleBlack2003/ohm-mask-designer/releases/latest) |
+| Web app | [![Website](https://img.shields.io/website?url=https%3A%2F%2Flittleblack2003.github.io%2Fohm-mask-designer%2F&label=web%20app)](https://littleblack2003.github.io/ohm-mask-designer/) |
+| Deploy status | [![Deploy](https://github.com/littleBlack2003/ohm-mask-designer/actions/workflows/pages.yml/badge.svg)](https://github.com/littleBlack2003/ohm-mask-designer/actions/workflows/pages.yml) |
+| Platform | ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Web-blue) |
+| Contributing | [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md) |
 
 <p align="center">
   <img src="assets/ohm-logo.svg" alt="Wuhan Ohm Technology Co., Ltd. Logo" width="520">

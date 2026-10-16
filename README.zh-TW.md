@@ -2,7 +2,14 @@
 
 [English](README.en.md) | [简体中文](README.md) | [繁體中文](README.zh-Hant.md)
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/littleBlack2003/ohm-mask-designer?label=release&sort=semver)](https://github.com/littleBlack2003/ohm-mask-designer/releases/latest) [![Website](https://img.shields.io/website?url=https%3A%2F%2Flittleblack2003.github.io%2Fohm-mask-designer%2F&label=web%20app)](https://littleblack2003.github.io/ohm-mask-designer/) [![Deploy](https://github.com/littleBlack2003/ohm-mask-designer/actions/workflows/pages.yml/badge.svg)](https://github.com/littleBlack2003/ohm-mask-designer/actions/workflows/pages.yml) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Web-blue) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+| 項目 | 徽章 |
+| --- | --- |
+| 開源授權 | [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) |
+| 最新版本 | [![Release](https://img.shields.io/github/v/release/littleBlack2003/ohm-mask-designer?label=release&sort=semver)](https://github.com/littleBlack2003/ohm-mask-designer/releases/latest) |
+| 線上網頁版 | [![Website](https://img.shields.io/website?url=https%3A%2F%2Flittleblack2003.github.io%2Fohm-mask-designer%2F&label=web%20app)](https://littleblack2003.github.io/ohm-mask-designer/) |
+| 部署狀態 | [![Deploy](https://github.com/littleBlack2003/ohm-mask-designer/actions/workflows/pages.yml/badge.svg)](https://github.com/littleBlack2003/ohm-mask-designer/actions/workflows/pages.yml) |
+| 平台 | ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Web-blue) |
+| 參與貢獻 | [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md) |
 
 
 > 本頁為**台灣用語**版；通用繁體請見 [README.zh-Hant.md](README.zh-Hant.md)。
