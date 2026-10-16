@@ -137,6 +137,22 @@ def prepare(body):
                 spec["foil"].pop(key, None)
                 if key in project_settings["foil"]:
                     spec["foil"][key] = copy.deepcopy(project_settings["foil"][key])
+    mask_mode = body.get("mask_mode")
+    if mask_mode == "manual":
+        tm = dict(spec.get("test_mask") or {})
+        tm["mode"] = "manual"
+        mask_outline = body.get("mask_outline")
+        if mask_outline:
+            tm["outline"] = copy.deepcopy(mask_outline)
+        else:
+            tm.pop("outline", None)
+        tm["holes"] = copy.deepcopy(body.get("mask_holes") or [])
+        spec["test_mask"] = tm
+    elif mask_mode == "auto":
+        tm = dict(spec.get("test_mask") or {})
+        tm.pop("mode", None)
+        tm.pop("holes", None)
+        spec["test_mask"] = tm
     validate_project(spec)
     uncertainty = body.get("uncertainty_settings")
     spec["uncertainty_settings"] = area_stats.settings(

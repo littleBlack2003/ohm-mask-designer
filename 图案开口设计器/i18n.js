@@ -388,6 +388,27 @@
   };
   function trad(s) { return [...s].map(ch => S2T[ch] || ch).join(''); }
 
+  // Phase 2f: manual test-mask drawing.
+  Object.assign(DICT.en, {
+    '自主绘制': 'Manual', '生成方式': 'Generation mode', '自动生成（活性区域∩ITO）': 'Auto (active ∩ ITO)',
+    '自主绘制（外形+通光孔）': 'Manual (outline + holes)', 'mask 外形': 'Mask outline', 'mask 通光孔': 'Mask holes',
+    '外形与通光孔自主绘制（{n} 个孔）': 'Outline and through-holes drawn manually ({n} holes)',
+    '在 mask 上绘制外形与通光孔；参数在右侧修改。': 'Draw the mask outline and through-holes on the mask page; edit parameters on the right.',
+    '自主绘制：切换到“mask”页，用绘图工具画出 mask 外形（一个）与通光孔（多个），再点下面应用。': 'Manual: switch to the "mask" page and draw the mask outline (one) and through-holes (several) with the drawing tools, then click Apply below.'
+  });
+  Object.assign(DICT['zh-Hant'], {
+    '自主绘制': '自主繪製', '生成方式': '生成方式', '自动生成（活性区域∩ITO）': '自動生成（活性區域∩ITO）',
+    '自主绘制（外形+通光孔）': '自主繪製（外形+通光孔）', 'mask 外形': 'mask 外形', 'mask 通光孔': 'mask 通光孔',
+    '外形与通光孔自主绘制（{n} 个孔）': '外形與通光孔自主繪製（{n} 個孔）',
+    '在 mask 上绘制外形与通光孔；参数在右侧修改。': '在 mask 上繪製外形與通光孔；參數在右側修改。'
+  });
+  Object.assign(DICT['zh-TW'], {
+    '自主绘制': '自主繪製', '生成方式': '產生方式', '自动生成（活性区域∩ITO）': '自動產生（活性區域∩ITO）',
+    '自主绘制（外形+通光孔）': '自主繪製（外形+通光孔）', 'mask 外形': 'mask 外形', 'mask 通光孔': 'mask 通光孔',
+    '外形与通光孔自主绘制（{n} 个孔）': '外形與通光孔自主繪製（{n} 個孔）',
+    '在 mask 上绘制外形与通光孔；参数在右侧修改。': '在 mask 上繪製外形與通光孔；參數在右側修改。'
+  });
+
   function t(s) {
     if (lang === 'zh-Hans' || s == null) return s;
     const d = DICT[lang];

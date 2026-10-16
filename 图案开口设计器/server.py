@@ -202,7 +202,7 @@ def test_mask_geometry(spec):
         result['error']=str(exc)
     return result
 
-def prepare(features, ito_features=None, markings=None, uncertainty=None, project_settings=None):
+def prepare(features, ito_features=None, markings=None, uncertainty=None, project_settings=None, mask_mode=None, mask_outline=None, mask_holes=None):
     if not isinstance(features,list) or len(features)>80:
         raise m.SpecError('单格图案须为数组，最多80个图案对象')
     valid_region_roles={'unassigned','active','common'}
@@ -220,6 +220,17 @@ def prepare(features, ito_features=None, markings=None, uncertainty=None, projec
             for key in ('per_window','outline','frame_holes'):
                 spec['foil'].pop(key,None)
                 if key in project_settings['foil']:spec['foil'][key]=copy.deepcopy(project_settings['foil'][key])
+    if mask_mode=='manual':
+        tm=dict(spec.get('test_mask') or {})
+        tm['mode']='manual'
+        if mask_outline:tm['outline']=copy.deepcopy(mask_outline)
+        else:tm.pop('outline',None)
+        tm['holes']=copy.deepcopy(mask_holes or [])
+        spec['test_mask']=tm
+    elif mask_mode=='auto':
+        tm=dict(spec.get('test_mask') or {})
+        tm.pop('mode',None);tm.pop('holes',None)
+        spec['test_mask']=tm
     validate_project(spec)
     spec['uncertainty_settings'] = area_stats.settings(uncertainty if uncertainty is not None else spec.get('uncertainty_settings'))
     if markings is not None:
@@ -312,7 +323,7 @@ class Handler(BaseHTTPRequestHandler):
                     self.send(200,{'ok':True})
                     if STOP_SERVER:threading.Thread(target=STOP_SERVER,daemon=True).start()
                     return
-                spec,shapes=prepare(body['features'],body.get('ito_features'),body.get('markings'),body.get('uncertainty_settings'),body.get('project_settings'))
+                spec,shapes=prepare(body['features'],body.get('ito_features'),body.get('markings'),body.get('uncertainty_settings'),body.get('project_settings'),body.get('mask_mode'),body.get('mask_outline'),body.get('mask_holes'))
                 if path=='/api/statistics':
                     self.send(200,{'ok':True,'statistics':area_stats.calculate(spec,m,spec['uncertainty_settings'])});return
                 if path=='/api/layout':

@@ -33,11 +33,21 @@ function drawPartCanvas(kind,g){
   return;
  }
  const tm=frame.test_mask||{};
- const gridOutline=tm.outline||frame.foil_outline||frame.outline;if(tm.outline)rawShape(tm.outline,g,'#fff2af','#d4c77b',.08);
+ const config=project.test_mask||{};
+ const gridOutline=tm.outline||frame.foil_outline||frame.outline;
+ if(config.mode==='manual'){
+  if(tm.outline)rawShape(tm.outline,g,'#fff2af','#d4c77b',.08);
+  for(const s of shapes.filter(x=>x.layer==='mask_outline'))renderShape(s,g,true);
+  for(const s of shapes.filter(x=>x.layer==='mask'))renderShape(s,g,true);
+  if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(gridOutline),true)}
+  $('canvas-label').textContent=T('测试 mask')+' · '+T('自主绘制');
+  $('canvas-subtitle').textContent=TF('外形与通光孔自主绘制（{n} 个孔）',{n:shapes.filter(x=>x.layer==='mask').length});
+  return;
+ }
+ if(tm.outline)rawShape(tm.outline,g,'#fff2af','#d4c77b',.08);
  for(const shape of tm.holes||[])rawShape(shape,g,'white','#197366',.06);
   if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(gridOutline),true)}
  $('canvas-label').textContent=T('测试 mask');
- const config=project.test_mask||{};
   $('canvas-subtitle').textContent=!tm.enabled?T('自动生成已关闭'):tm.error?TF('暂不能生成：{e}',{e:tm.error}):TF('{n} 个通光孔，{p}% 边长，{s} mm 吸附',{n:(tm.holes||[]).length,p:(config.aperture_scale??.8)*100,s:config.size_snap_mm??.1});
 }
 
@@ -87,12 +97,19 @@ function partProperties(parent,kind){
   apply('应用',s=>{if(controls.mode.value==='follow')delete s.foil.outline;else if(controls.mode.value==='circle')s.foil.outline={type:'circle',diameter:number('diameter','掩模片直径')};else s.foil.outline={type:'rect',width:number('width','掩模片宽度'),height:number('height','掩模片高度'),corner_radius:number('radius','掩模片圆角')}});advanced();return;
  }
  heading('测试 mask');let config=project.test_mask||{},outline=config.outline;
+ let manual=config.mode==='manual';
+ fields([['mmode','生成方式',manual?'manual':'auto',{span:true,choices:{auto:'自动生成（活性区域∩ITO）',manual:'自主绘制（外形+通光孔）'}}]]);
+ if(manual){
+  parent.insertAdjacentHTML('beforeend','<p class="hint">自主绘制：切换到“mask”页，用绘图工具画出 mask 外形（一个）与通光孔（多个），再点下面应用。</p>');
+  fields([['margin','外框边缘余量 / mm',config.edge_margin_mm??project.min_web_mm??.3,{min:0}]]);
+  apply('应用',s=>{let tm={...(s.test_mask||{}),mode:'manual',edge_margin_mm:number('margin','边缘余量')};s.test_mask=tm});advanced();return;
+ }
  if(outline&&!['rect','circle'].includes(outline.type)){parent.insertAdjacentHTML('beforeend','<p class="hint">当前测试 mask 使用高级自定义轮廓，请在完整板件设置的高级 JSON 中编辑。</p>');advanced();return}
  let mode=outline?.type||'substrate',base=outline||project.substrate;
  fields([['enabled','自动生成测试 mask',config.enabled!==false,{type:'checkbox',span:true}],['scale','通光孔边长比例 / %',(config.aperture_scale??.8)*100,{min:.1,max:99.9}],['snap','尺寸吸附 / mm',config.size_snap_mm??.1,{min:.001}],['margin','外框边缘余量 / mm',config.edge_margin_mm??project.min_web_mm??.3,{min:0}]]);
  fields([['mode','mask 外形',mode,{span:true,choices:{substrate:'跟随基板',rect:'独立矩形',circle:'独立圆形'}}],['width','矩形宽度 / mm',base.width||25,{min:.01}],['height','矩形高度 / mm',base.height||25,{min:.01}],['radius','矩形圆角 R / mm',base.corner_radius||0,{min:0}],['diameter','圆形直径 / mm',base.diameter||25,{min:.01}]]);
  let toggle=()=>{let mode=controls.mode.value;for(const key of ['width','height','radius'])controls[key].disabled=mode!=='rect';controls.diameter.disabled=mode!=='circle'};controls.mode.onchange=toggle;toggle();
- apply('应用',s=>{let tm={...(s.test_mask||{}),enabled:controls.enabled.checked,aperture_scale:number('scale','边长比例')/100,size_snap_mm:number('snap','吸附步长'),edge_margin_mm:number('margin','边缘余量')};if(controls.mode.value==='substrate')delete tm.outline;else if(controls.mode.value==='circle')tm.outline={type:'circle',diameter:number('diameter','测试 mask 直径')};else tm.outline={type:'rect',width:number('width','测试 mask 宽度'),height:number('height','测试 mask 高度'),corner_radius:number('radius','测试 mask 圆角')};s.test_mask=tm});advanced();
+ apply('应用',s=>{let tm={...(s.test_mask||{}),mode:'auto',enabled:controls.enabled.checked,aperture_scale:number('scale','边长比例')/100,size_snap_mm:number('snap','吸附步长'),edge_margin_mm:number('margin','边缘余量')};if(controls.mode.value==='substrate')delete tm.outline;else if(controls.mode.value==='circle')tm.outline={type:'circle',diameter:number('diameter','测试 mask 直径')};else tm.outline={type:'rect',width:number('width','测试 mask 宽度'),height:number('height','测试 mask 高度'),corner_radius:number('radius','测试 mask 圆角')};s.test_mask=tm});advanced();
 }
 const layoutPages=[['project','基本信息'],['substrate','基板'],['skeleton','骨架'],['array','定位开口与图案阵列'],['foil','掩模片'],['testmask','测试 mask'],['advanced','高级设置']];
 const layoutFieldDefinitions=[

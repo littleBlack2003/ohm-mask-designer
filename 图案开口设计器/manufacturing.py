@@ -112,6 +112,8 @@ def build_test_mask(spec,m,area_stats):
     config=spec.get('test_mask') or {}
     if not isinstance(config,dict):
         raise ValueError('test_mask 必须是对象')
+    if config.get('mode')=='manual':
+        return _build_manual_test_mask(spec,m,config)
     if config.get('enabled',True) is False:
         return None,None
     scale=float(config.get('aperture_scale',.8))
@@ -149,6 +151,32 @@ def build_test_mask(spec,m,area_stats):
     m.validate_parts([part],test_spec)
     extra=m._extra_info(test_spec,'light_block')
     extra[1]=f'通光孔尺寸 : 活性有效区域边长的 {scale*100:.1f}%, 以 {snap:.3f} mm 吸附'
+    extra.append(f'外框边缘余量 : 至少 {edge_margin:.3f} mm')
+    report=m.analyze(test_spec,[part],extra)
+    if part.validation_errors:
+        raise ValueError('测试遮光掩模几何校验未通过：'+'；'.join(part.validation_errors))
+    return part,report
+
+
+def _build_manual_test_mask(spec,m,config):
+    """Manual mode: the test mask's outline and through-holes are drawn by the user."""
+    feature_list=config.get('holes') or []
+    if not feature_list:
+        return None,None
+    outline_spec=config.get('outline') or spec['substrate']
+    holes=m.build_features(feature_list,'test_mask')
+    part=m.Part('TEST_MASK','测试遮光掩模')
+    part.outline=m.build_outline(outline_spec,spec.get('arc_segments_per_90',24))
+    part.holes=holes
+    edge_margin=float(config.get('edge_margin_mm',spec.get('min_web_mm',.3)))
+    part.bounds=[m._inset_boundary(part.outline,edge_margin)]
+    test_spec={'kind':'light_block','name':spec['name']+' 测试遮光掩模','substrate':outline_spec,
+               'aperture_inset_mm':0,'min_web_mm':spec.get('min_web_mm',.3),
+               'arc_segments_per_90':spec.get('arc_segments_per_90',24),
+               'curve_tolerance_mm':spec.get('curve_tolerance_mm',.001)}
+    m.validate_parts([part],test_spec)
+    extra=m._extra_info(test_spec,'light_block')
+    extra[1]=f'通光孔尺寸 : 自主绘制，{len(holes)} 个'
     extra.append(f'外框边缘余量 : 至少 {edge_margin:.3f} mm')
     report=m.analyze(test_spec,[part],extra)
     if part.validation_errors:
