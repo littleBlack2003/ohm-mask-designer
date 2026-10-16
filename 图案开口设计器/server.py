@@ -19,10 +19,23 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 import manufacturing
 import area_statistics as area_stats
 import loc
+def default_output_dir():
+    """Exports land in the user's Downloads folder by default."""
+    if os.name=='nt':
+        try:
+            import winreg
+            key=winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders')
+            value,_=winreg.QueryValueEx(key,'{374DE290-123F-4565-9164-39C4925E467B}')
+            winreg.CloseKey(key)
+            if value:return Path(value)
+        except Exception:pass
+    return Path.home()/'Downloads'
+
+
 PROJECT = ROOT.parent / '默认25mm基底'
 SOURCE = PROJECT / '项目设置.json'
 DRAFT = PROJECT / '图案开口设计草稿.json'
-OUTPUT = PROJECT / '加工图纸'
+OUTPUT = default_output_dir()
 loader = importlib.util.spec_from_file_location('mask', ROOT.parent / 'ohm-mask-skill/scripts/make_mask.py')
 m = importlib.util.module_from_spec(loader)
 loader.loader.exec_module(m)
@@ -72,7 +85,7 @@ def configure_project(path):
         PROJECT=path.parent;SOURCE=path
         legacy=path.name=='项目设置.json'
         DRAFT=PROJECT/'图案开口设计草稿.json' if legacy else path
-        OUTPUT=PROJECT/'加工图纸' if legacy or path.name=='项目.json' else PROJECT/(path.stem+'_加工图纸')
+        OUTPUT=default_output_dir()
     return spec
 
 
