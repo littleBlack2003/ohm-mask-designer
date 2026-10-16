@@ -11,6 +11,7 @@ import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import threading
+import time
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(sys._MEIPASS) / '图案开口设计器' if getattr(sys,'frozen',False) else Path(__file__).resolve().parent
@@ -30,6 +31,20 @@ DEFAULT_SOURCE = SOURCE
 LIBRARY = ROOT.parent / '掩模项目'
 APP_VERSION = '0.9.6'
 STOP_SERVER = None
+LAST_PING = [0.0]
+WATCHDOG = [None]
+
+
+def _shutdown_watchdog(stop, idle=45.0):
+    """Exit the local service if the browser page stops sending heartbeats."""
+    while True:
+        time.sleep(5)
+        if LAST_PING[0] and time.time() - LAST_PING[0] > idle:
+            try:
+                stop()
+            except Exception:
+                pass
+            return
 
 def initial():
     with LOCK:
@@ -323,6 +338,11 @@ class Handler(BaseHTTPRequestHandler):
                     self.send(200,{'ok':True})
                     if STOP_SERVER:threading.Thread(target=STOP_SERVER,daemon=True).start()
                     return
+                if path=='/api/ping':
+                    LAST_PING[0]=time.time()
+                    if WATCHDOG[0] is None and STOP_SERVER is not None:
+                        WATCHDOG[0]=threading.Thread(target=_shutdown_watchdog,args=(STOP_SERVER,),daemon=True);WATCHDOG[0].start()
+                    self.send(200,{'ok':True});return
                 spec,shapes=prepare(body['features'],body.get('ito_features'),body.get('markings'),body.get('uncertainty_settings'),body.get('project_settings'),body.get('mask_mode'),body.get('mask_outline'),body.get('mask_holes'))
                 if path=='/api/statistics':
                     self.send(200,{'ok':True,'statistics':area_stats.calculate(spec,m,spec['uncertainty_settings'])});return
