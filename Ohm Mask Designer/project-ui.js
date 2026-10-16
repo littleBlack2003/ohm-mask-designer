@@ -68,7 +68,7 @@ function partProperties(parent,kind){
  function subheading(text){let h=document.createElement('h4');h.className='part-subheading';h.textContent=T(text);parent.append(h)}
  function fields(defs){let row=document.createElement('div');row.className='row';for(const def of defs){let [key,label,value,options]=def,wrap=document.createElement('div');wrap.className='field';if(options?.span)wrap.classList.add('span');let l=document.createElement('label');l.htmlFor='part-'+key;l.textContent=T(label);let input;if(options?.choices){input=document.createElement('select');for(const [v,text]of Object.entries(options.choices)){let o=document.createElement('option');o.value=v;o.textContent=T(text);input.append(o)}input.value=value}else{input=document.createElement('input');input.type=options?.type||'number';if(input.type==='checkbox'){input.checked=!!value;input.style.width='auto'}else{input.value=value;input.step=options?.step??'.01';if(options?.min!==undefined)input.min=options.min;if(options?.max!==undefined)input.max=options.max}}input.id='part-'+key;input.setAttribute('aria-label',T(label));controls[key]=input;wrap.append(l,input);row.append(wrap)}parent.append(row)}
   function number(key,label){let input=controls[key],value=Number(input.value);if(input.validity.badInput||input.validity.rangeUnderflow||input.validity.rangeOverflow||input.value===''||!Number.isFinite(value))throw Error(TF('请检查{label}',{label}));return value}
- function advanced(){let b=document.createElement('button');b.className='small';b.style.width='100%';b.textContent=T('完整设置');b.onclick=()=>$('project-settings').click();parent.append(b)}
+ function advanced(){let b=document.createElement('button');b.className='small';b.style.width='100%';b.style.marginTop='10px';b.textContent=T('完整设置');b.onclick=()=>$('project-settings').click();parent.append(b)}
  function apply(text,update){let b=document.createElement('button');b.className='primary';b.style.width='100%';b.textContent=T(text);b.onclick=()=>applyPartConfiguration(update,b);parent.append(b)}
  if(kind==='skeleton'){
   heading('骨架');let outline=project.skeleton.outline,handles=project.skeleton.handle?(Array.isArray(project.skeleton.handle)?project.skeleton.handle:[project.skeleton.handle]):[],picks=project.skeleton.pick_hole?(Array.isArray(project.skeleton.pick_hole)?project.skeleton.pick_hole:[project.skeleton.pick_hole]):[],windowsConfig=project.skeleton.windows||{};
@@ -102,7 +102,7 @@ function partProperties(parent,kind){
  if(manual){
   parent.insertAdjacentHTML('beforeend','<p class="hint">自主绘制：切换到“mask”页，用绘图工具画出 mask 外形（一个）与通光孔（多个），再点下面应用。</p>');
  apply('应用',s=>{let tm={...(s.test_mask||{}),mode:'manual'};s.test_mask=tm});
-  let expBtn=document.createElement('button');expBtn.className='small';expBtn.style.width='100%';expBtn.textContent='单独导出 mask 切割 DXF';expBtn.onclick=()=>exportMaskOnly(expBtn);parent.append(expBtn);
+  let expBtn=document.createElement('button');expBtn.className='small';expBtn.style.width='100%';expBtn.style.marginTop='10px';expBtn.textContent='单独导出 mask 切割 DXF';expBtn.onclick=()=>exportMaskOnly(expBtn);parent.append(expBtn);
   advanced();return;
  }
  if(outline&&!['rect','circle'].includes(outline.type)){parent.insertAdjacentHTML('beforeend','<p class="hint">当前测试 mask 使用高级自定义轮廓，请在完整板件设置的高级 JSON 中编辑。</p>');advanced();return}
