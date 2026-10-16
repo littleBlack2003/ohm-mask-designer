@@ -35,9 +35,9 @@ function drawPartCanvas(kind,g){
  const tm=frame.test_mask||{};
  const config=project.test_mask||{};
  const gridOutline=tm.outline||frame.foil_outline||frame.outline;
- if(config.mode==='manual'){
+ if(kind==='testmask_manual'||config.mode==='manual'){
   const HL=300/2;
-  drawCoordinateGrid(g,[-HL,-HL,HL,HL],[]);
+  drawCoordinateGrid(g,[-HL,-HL,HL,HL],[],1);
   rawShape(['poly',[[-HL,-HL],[HL,-HL],[HL,HL],[-HL,HL]]],g,'none','#c98a2a',.06);
   for(const s of shapes.filter(x=>x.layer==='mask_outline'))renderShape(s,g,true);
   for(const s of shapes.filter(x=>x.layer==='mask'))renderShape(s,g,true);
@@ -97,8 +97,8 @@ function partProperties(parent,kind){
   let toggle=()=>{let mode=controls.mode.value;for(const key of ['width','height','radius'])controls[key].disabled=mode!=='rect';controls.diameter.disabled=mode!=='circle'};controls.mode.onchange=toggle;toggle();
   apply('应用',s=>{if(controls.mode.value==='follow')delete s.foil.outline;else if(controls.mode.value==='circle')s.foil.outline={type:'circle',diameter:number('diameter','掩模片直径')};else s.foil.outline={type:'rect',width:number('width','掩模片宽度'),height:number('height','掩模片高度'),corner_radius:number('radius','掩模片圆角')}});advanced();return;
  }
- heading('测试 mask');let config=project.test_mask||{},outline=config.outline;
- let manual=config.mode==='manual';
+ heading(kind==='testmask_manual'?'手动制作 mask':'测试 mask');let config=project.test_mask||{},outline=config.outline;
+ let manual=kind==='testmask_manual'||config.mode==='manual';
  if(manual){
   parent.insertAdjacentHTML('beforeend','<p class="hint">自主绘制：切换到“mask”页，用绘图工具画出 mask 外形（一个）与通光孔（多个），再点下面应用。</p>');
  apply('应用',s=>{let tm={...(s.test_mask||{}),mode:'manual'};s.test_mask=tm});
