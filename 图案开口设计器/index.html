@@ -89,13 +89,13 @@ let f=document.createElement('div');f.className='field span';let targetLabel=doc
 
 function niceAxisStep(target){let power=10**Math.floor(Math.log10(Math.max(target,1e-6))),scaled=target/power;return(scaled<=1?1:scaled<=2?2:scaled<=5?5:10)*power}
 function drawCoordinateAxes(g,small){
- const c=camera(),rect=$('canvas').getBoundingClientRect(),span=Math.max(c.w,c.h),svg=$('canvas'),axisWidth=span/600,font=span/(small?78:45),x0=c.x-c.w/2,x1=c.x+c.w/2,y0=c.y-c.h/2,y1=c.y+c.h/2,gx=rect.width>0?52/rect.width*c.w:c.w*.07,gy=rect.height>0?52/rect.height*c.h:c.h*.07,px=x0+gx,py=y0+gy;
+ const c=camera(),rect=$('canvas').getBoundingClientRect(),svg=$('canvas'),ppm=rect.height>0?rect.height/c.h:1,font=(small?9:12)/ppm,axisWidth=1/ppm,x0=c.x-c.w/2,x1=c.x+c.w/2,y0=c.y-c.h/2,y1=c.y+c.h/2,gx=rect.width>0?40/rect.width*c.w:c.w*.07,gy=rect.height>0?40/rect.height*c.h:c.h*.07,px=x0+gx,py=y0+gy;
  node('rect',{x:x0,y:y0,width:gx,height:c.h,fill:'#f2f6f6','pointer-events':'none'},g);node('rect',{x:x0,y:y0,width:c.w,height:gy,fill:'#f2f6f6','pointer-events':'none'},g);
  node('line',{x1:px,y1:y0,x2:px,y2:y1,stroke:'#cfdadd','stroke-width':axisWidth,'pointer-events':'none'},g);node('line',{x1:x0,y1:py,x2:x1,y2:py,stroke:'#cfdadd','stroke-width':axisWidth,'pointer-events':'none'},g);
  if(0>=px)node('line',{x1:0,y1:py,x2:0,y2:y1,stroke:'#7e9296','stroke-width':axisWidth,'pointer-events':'none'},g);if(0>=py)node('line',{x1:px,y1:0,x2:x1,y2:0,stroke:'#7e9296','stroke-width':axisWidth,'pointer-events':'none'},g);
- const major=niceAxisStep(span/12),textAttrs={'font-size':font,fill:'#5a6f74',stroke:'white','stroke-width':font*.08,'paint-order':'stroke','font-family':'Microsoft YaHei','pointer-events':'none'};
- for(let v=Math.ceil(px/major)*major;v<=x1+major*1e-8;v+=major){let value=Math.abs(v)<major*1e-8?0:round(v),t=node('text',{...textAttrs,x:round(v),y:-y0-gy/2+font*.32,'text-anchor':'middle'},svg);t.textContent=value}
- for(let v=Math.ceil(py/major)*major;v<=y1+major*1e-8;v+=major){let value=Math.abs(v)<major*1e-8?0:round(v),t=node('text',{...textAttrs,x:x0+gx/2,y:-v+font*.32,'text-anchor':'middle'},svg);t.textContent=value}
+ const majorX=niceAxisStep(Math.max(c.w/10,1e-6)),majorY=niceAxisStep(Math.max(c.h/10,1e-6)),textAttrs={'font-size':font,fill:'#5a6f74',stroke:'white','stroke-width':font*.12,'paint-order':'stroke','font-family':'Microsoft YaHei','pointer-events':'none'};
+ for(let v=Math.ceil(px/majorX)*majorX;v<=x1+majorX*1e-8;v+=majorX){let value=Math.abs(v)<majorX*1e-8?0:round(v),t=node('text',{...textAttrs,x:round(v),y:-y0-gy/2+font*.34,'text-anchor':'middle'},svg);t.textContent=value}
+ for(let v=Math.ceil(py/majorY)*majorY;v<=y1+majorY*1e-8;v+=majorY){let value=Math.abs(v)<majorY*1e-8?0:round(v),t=node('text',{...textAttrs,x:x0+gx/2,y:-v+font*.34,'text-anchor':'middle'},svg);t.textContent=value}
 }
 function drawEngineeringGrid(g){
  const c=camera(),step=10,span=Math.max(c.w,c.h),defs=node('defs',{},g),minor=node('pattern',{id:'background-grid-minor',width:step,height:step,patternUnits:'userSpaceOnUse'},defs),majorStep=step*5,major=node('pattern',{id:'background-grid-major',width:majorStep,height:majorStep,patternUnits:'userSpaceOnUse'},defs);
