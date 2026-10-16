@@ -2,6 +2,8 @@
 
 [English](README.en.md) | [简体中文](README.md) | [繁體中文](README.zh-Hant.md)
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 
 > 本頁為**台灣用語**版；通用繁體請見 [README.zh-Hant.md](README.zh-Hant.md)。
 

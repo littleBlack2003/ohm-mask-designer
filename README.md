@@ -2,6 +2,8 @@
 
 [English](README.en.md) | **简体中文** | [繁體中文](README.zh-Hant.md)
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 <p align="center">
   <img src="assets/ohm-logo.svg" alt="武汉欧姆科技有限公司 Logo" width="520">
 </p>
