@@ -14,7 +14,10 @@ function fittedCamera(){
  else if(view==='testmask')b=rawBounds(frame.test_mask?.outline||frame.foil_outline||frame.outline);
  else{const all=[rawBounds(frame.outline),rawBounds(frame.foil_outline||frame.outline)];b=[Math.min(...all.map(q=>q[0])),Math.min(...all.map(q=>q[1])),Math.max(...all.map(q=>q[2])),Math.max(...all.map(q=>q[3]))]}
  const pad=Math.max(b[2]-b[0],b[3]-b[1])*(view==='cell'?.16:['skeleton','foil','testmask'].includes(view)?.11:.075);
- return {x:(b[0]+b[2])/2,y:(b[1]+b[3])/2,w:Math.max(.1,b[2]-b[0]+2*pad),h:Math.max(.1,b[3]-b[1]+2*pad)};
+ const c={x:(b[0]+b[2])/2,y:(b[1]+b[3])/2,w:Math.max(.1,b[2]-b[0]+2*pad),h:Math.max(.1,b[3]-b[1]+2*pad)};
+ const r=$('canvas').getBoundingClientRect(),ar=r.height>0?r.width/r.height:0;
+ if(ar>0){if(c.w<c.h*ar)c.w=c.h*ar;else c.h=c.w/ar}
+ return c;
 }
 function camera(){return cameras[view]||(cameras[view]=fittedCamera())}
 function applyCamera(){const c=camera();$('canvas').setAttribute('viewBox',`${c.x-c.w/2} ${-c.y-c.h/2} ${c.w} ${c.h}`)}

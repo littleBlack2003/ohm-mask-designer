@@ -16,7 +16,7 @@ function drawPartCanvas(kind,g){
   rawShape(frame.outline,g,'#add8e6','#6b97a7',.25);
   for(const shape of frame.windows)rawShape(shape,g,'white','#6b97a7',.16);
   for(const shape of frame.tooling||[])rawShape(shape,g,'white','#6b97a7',.16);
-  if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(frame.outline),true)}
+  if(assemblyGridVisible)drawEngineeringGrid(g);
   $('canvas-label').textContent=T('骨架外框');
   $('canvas-subtitle').textContent=TF('主体 {a}，{b} 个定位开口',{a:shapeSizeText(project.skeleton.outline),b:frame.windows.length});
   return;
@@ -27,7 +27,7 @@ function drawPartCanvas(kind,g){
   if(project.foil.per_window!==false){for(const [x,y,angle]of frame.centers){let cell=node('g',{transform:`translate(${x} ${y}) rotate(${angle})`},g);for(const shape of apertures)renderShape(shape,cell)}}
   else for(const shape of apertures)renderShape(shape,g);
   for(const shape of frame.foil_tooling||[])rawShape(shape,g,'white','#a99a55',.16);
-  if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(foilOutline),true)}
+  if(assemblyGridVisible)drawEngineeringGrid(g);
   $('canvas-label').textContent=T('掩模片外框');
   $('canvas-subtitle').textContent=project.foil.outline?TF('独立外形 {a}',{a:shapeSizeText(project.foil.outline)}):T('外形跟随骨架（含把手）');
   return;
@@ -47,7 +47,7 @@ function drawPartCanvas(kind,g){
  }
  if(tm.outline)rawShape(tm.outline,g,'#fff2af','#d4c77b',.08);
  for(const shape of tm.holes||[])rawShape(shape,g,'white','#197366',.06);
-  if(assemblyGridVisible){drawEngineeringGrid(g);drawCoordinateAxes(g,rawBounds(gridOutline),true)}
+  if(assemblyGridVisible)drawEngineeringGrid(g)
  $('canvas-label').textContent=T('测试 mask');
   $('canvas-subtitle').textContent=!tm.enabled?T('自动生成已关闭'):tm.error?TF('暂不能生成：{e}',{e:tm.error}):TF('{n} 个通光孔，{p}% 边长，{s} mm 吸附',{n:(tm.holes||[]).length,p:(config.aperture_scale??.8)*100,s:config.size_snap_mm??.1});
 }
