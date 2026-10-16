@@ -58,7 +58,7 @@ async function applyPartConfiguration(update,button){
   let settings=layoutSettings();update(settings);
   let result=await api('layout',{...designPayload(),project_settings:settings});
   project=result.spec;frame=result.frame;cameras={};updateProjectSummary();localSave();updateWorkspaceTools();draw();properties();
-  await api('save',designPayload());await validate();$('save-state').textContent='已保存外框设置';toast('外框设置已应用并保存');
+  await api('save',designPayload());$('validate-state').textContent='待校验';$('save-state').textContent='已保存外框设置';toast('外框设置已应用并保存');
  }catch(error){toast(error.message)}finally{button.disabled=false}
 }
 
