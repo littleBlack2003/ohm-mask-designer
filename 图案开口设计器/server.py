@@ -335,6 +335,20 @@ class Handler(BaseHTTPRequestHandler):
                 if path=='/api/save':
                     with LOCK: save_document(spec)
                     self.send(200,{'ok':True,'valid':valid,'report':loc.report(report,lang),'path':str(DRAFT)});return
+                if path=='/api/mask':
+                    part,test_report=manufacturing.build_test_mask(spec,m,area_stats)
+                    if not part:
+                        self.send(422,{'error':loc.message('未生成测试遮光掩模',lang)});return
+                    tfiles={f"{spec['name']}_测试遮光掩模_切割.dxf":m.render([part],False),'测试遮光掩模_校验报告.txt':(test_report or '')}
+                    tfiles={loc.filename(k,lang):v for k,v in tfiles.items()}
+                    with LOCK:
+                        OUTPUT.mkdir(parents=True,exist_ok=True)
+                        for filename,content in tfiles.items():
+                            file=OUTPUT/filename
+                            if isinstance(content,bytes):file.write_bytes(content)
+                            else:file.write_text(content,encoding='utf-8',newline='\n')
+                        save_document(spec)
+                    self.send(200,{'ok':True,'report':loc.report(test_report,lang),'files':list(tfiles),'path':str(OUTPUT)});return
                 if path=='/api/generate':
                     if not shapes:raise m.SpecError('请先绘制单格图案开口')
                     if not valid:

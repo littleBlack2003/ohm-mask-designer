@@ -394,19 +394,22 @@
     '自主绘制（外形+通光孔）': 'Manual (outline + holes)', 'mask 外形': 'Mask outline', 'mask 通光孔': 'Mask holes',
     '外形与通光孔自主绘制（{n} 个孔）': 'Outline and through-holes drawn manually ({n} holes)',
     '在 mask 上绘制外形与通光孔；参数在右侧修改。': 'Draw the mask outline and through-holes on the mask page; edit parameters on the right.',
-    '自主绘制：切换到“mask”页，用绘图工具画出 mask 外形（一个）与通光孔（多个），再点下面应用。': 'Manual: switch to the "mask" page and draw the mask outline (one) and through-holes (several) with the drawing tools, then click Apply below.'
+    '自主绘制：切换到“mask”页，用绘图工具画出 mask 外形（一个）与通光孔（多个），再点下面应用。': 'Manual: switch to the "mask" page and draw the mask outline (one) and through-holes (several) with the drawing tools, then click Apply below.',
+    '单独导出 mask 切割 DXF': 'Export mask cutting DXF separately', '已单独导出 mask 切割文件': 'Mask cutting files exported', '未生成测试遮光掩模': 'No test mask was generated'
   });
   Object.assign(DICT['zh-Hant'], {
     '自主绘制': '自主繪製', '生成方式': '生成方式', '自动生成（活性区域∩ITO）': '自動生成（活性區域∩ITO）',
     '自主绘制（外形+通光孔）': '自主繪製（外形+通光孔）', 'mask 外形': 'mask 外形', 'mask 通光孔': 'mask 通光孔',
     '外形与通光孔自主绘制（{n} 个孔）': '外形與通光孔自主繪製（{n} 個孔）',
-    '在 mask 上绘制外形与通光孔；参数在右侧修改。': '在 mask 上繪製外形與通光孔；參數在右側修改。'
+    '在 mask 上绘制外形与通光孔；参数在右侧修改。': '在 mask 上繪製外形與通光孔；參數在右側修改。',
+    '单独导出 mask 切割 DXF': '單獨導出 mask 切割 DXF', '已单独导出 mask 切割文件': '已單獨導出 mask 切割文件', '未生成测试遮光掩模': '未生成測試遮光掩模'
   });
   Object.assign(DICT['zh-TW'], {
     '自主绘制': '自主繪製', '生成方式': '產生方式', '自动生成（活性区域∩ITO）': '自動產生（活性區域∩ITO）',
     '自主绘制（外形+通光孔）': '自主繪製（外形+通光孔）', 'mask 外形': 'mask 外形', 'mask 通光孔': 'mask 通光孔',
     '外形与通光孔自主绘制（{n} 个孔）': '外形與通光孔自主繪製（{n} 個孔）',
-    '在 mask 上绘制外形与通光孔；参数在右侧修改。': '在 mask 上繪製外形與通光孔；參數在右側修改。'
+    '在 mask 上绘制外形与通光孔；参数在右侧修改。': '在 mask 上繪製外形與通光孔；參數在右側修改。',
+    '单独导出 mask 切割 DXF': '單獨匯出 mask 切割 DXF', '已单独导出 mask 切割文件': '已單獨匯出 mask 切割檔案', '未生成测试遮光掩模': '未產生測試遮光掩模'
   });
 
   function t(s) {

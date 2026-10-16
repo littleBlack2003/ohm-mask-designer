@@ -103,7 +103,9 @@ function partProperties(parent,kind){
  if(manual){
   parent.insertAdjacentHTML('beforeend','<p class="hint">自主绘制：切换到“mask”页，用绘图工具画出 mask 外形（一个）与通光孔（多个），再点下面应用。</p>');
   fields([['margin','外框边缘余量 / mm',config.edge_margin_mm??project.min_web_mm??.3,{min:0}]]);
-  apply('应用',s=>{let tm={...(s.test_mask||{}),mode:'manual',edge_margin_mm:number('margin','边缘余量')};s.test_mask=tm});advanced();return;
+  apply('应用',s=>{let tm={...(s.test_mask||{}),mode:'manual',edge_margin_mm:number('margin','边缘余量')};s.test_mask=tm});
+  let expBtn=document.createElement('button');expBtn.className='small';expBtn.style.width='100%';expBtn.textContent='单独导出 mask 切割 DXF';expBtn.onclick=()=>exportMaskOnly(expBtn);parent.append(expBtn);
+  advanced();return;
  }
  if(outline&&!['rect','circle'].includes(outline.type)){parent.insertAdjacentHTML('beforeend','<p class="hint">当前测试 mask 使用高级自定义轮廓，请在完整板件设置的高级 JSON 中编辑。</p>');advanced();return}
  let mode=outline?.type||'substrate',base=outline||project.substrate;

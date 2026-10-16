@@ -253,6 +253,15 @@ def _run(action, body, lang="zh-Hans"):
         }
     if action == "save":
         return {"ok": True, "valid": valid, "report": loc.report(report, lang), "path": loc.message("浏览器本地存储", lang), "_spec": spec}
+    if action == "mask":
+        part, test_report = manufacturing.build_test_mask(spec, m, area_stats)
+        if not part:
+            return {"_status": 422, "error": loc.message("未生成测试遮光掩模", lang)}
+        tfiles = {f"{spec['name']}_测试遮光掩模_切割.dxf": m.render([part], False),
+                  "测试遮光掩模_校验报告.txt": (test_report or "")}
+        tfiles = {loc.filename(k, lang): v for k, v in tfiles.items()}
+        return {"ok": True, "report": loc.report(test_report, lang), "files": list(tfiles),
+                "_blobs": _encoded_files(tfiles), "path": loc.message("浏览器下载", lang)}
     if action == "generate":
         if not shapes:
             raise m.SpecError("请先绘制单格图案开口")
