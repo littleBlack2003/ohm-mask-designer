@@ -10,7 +10,8 @@ function fittedCamera(){
   b=[Math.min(...bb.map(b=>b[0])),Math.min(...bb.map(b=>b[1])),Math.max(...bb.map(b=>b[2])),Math.max(...bb.map(b=>b[3]))];
  }else if(view==='skeleton')b=rawBounds(frame.outline);
  else if(view==='foil')b=rawBounds(frame.foil_outline||frame.outline);
- else if(view==='testmask'||view==='testmask_manual')b=rawBounds(frame.test_mask?.outline||frame.foil_outline||frame.outline);
+ else if(view==='testmask_manual')b=[-150,-150,150,150];
+ else if(view==='testmask')b=rawBounds(frame.test_mask?.outline||frame.foil_outline||frame.outline);
  else{const all=[rawBounds(frame.outline),rawBounds(frame.foil_outline||frame.outline)];b=[Math.min(...all.map(q=>q[0])),Math.min(...all.map(q=>q[1])),Math.max(...all.map(q=>q[2])),Math.max(...all.map(q=>q[3]))]}
  const pad=Math.max(b[2]-b[0],b[3]-b[1])*(view==='cell'?.16:['skeleton','foil','testmask'].includes(view)?.11:.075);
  return {x:(b[0]+b[2])/2,y:(b[1]+b[3])/2,w:Math.max(.1,b[2]-b[0]+2*pad),h:Math.max(.1,b[3]-b[1]+2*pad)};
