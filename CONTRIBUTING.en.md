@@ -7,9 +7,9 @@ Issues and pull requests are welcome — report problems, improve the docs, or e
 Before submitting code, please run:
 
 ```powershell
-python -X utf8 -B -m unittest discover -s "图案开口设计器" -p "test_*.py"
+python -X utf8 -B -m unittest discover -s "Ohm Mask Designer" -p "test_*.py"
 python -X utf8 -B -m unittest discover -s "ohm-mask-skill/tests" -p "test_*.py"
-node --check "图案开口设计器/static-api.js"
+node --check "Ohm Mask Designer/static-api.js"
 ```
 
 For changes touching geometry or manufacturing files, describe the input parameters, expected results, and verification method in the pull request.

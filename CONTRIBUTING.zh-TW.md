@@ -9,9 +9,9 @@
 提交程式碼前，請執行：
 
 ```powershell
-python -X utf8 -B -m unittest discover -s "图案开口设计器" -p "test_*.py"
+python -X utf8 -B -m unittest discover -s "Ohm Mask Designer" -p "test_*.py"
 python -X utf8 -B -m unittest discover -s "ohm-mask-skill/tests" -p "test_*.py"
-node --check "图案开口设计器/static-api.js"
+node --check "Ohm Mask Designer/static-api.js"
 ```
 
 涉及幾何或加工檔案的修改，請在 Pull Request 中說明輸入參數、預期結果和驗證方法。

@@ -15,7 +15,7 @@ venv/
 
 # Packaged applications and build caches
 软件发布/
-图案开口设计器/打包缓存/
+Ohm Mask Designer/打包缓存/
 build/
 dist/
 *.exe

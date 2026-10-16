@@ -14,7 +14,7 @@ import threading
 import time
 from urllib.parse import unquote, urlsplit
 
-ROOT = Path(sys._MEIPASS) / '图案开口设计器' if getattr(sys,'frozen',False) else Path(__file__).resolve().parent
+ROOT = Path(sys._MEIPASS) / 'Ohm Mask Designer' if getattr(sys,'frozen',False) else Path(__file__).resolve().parent
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import manufacturing
 import area_statistics as area_stats
@@ -411,5 +411,5 @@ if __name__=='__main__':
     restore_project()
     server=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
     STOP_SERVER=server.shutdown
-    print(f'图案开口设计器：http://127.0.0.1:{args.port}',flush=True)
+    print(f'Ohm Mask Designer：http://127.0.0.1:{args.port}',flush=True)
     server.serve_forever()

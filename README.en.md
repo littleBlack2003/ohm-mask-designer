@@ -46,25 +46,25 @@ Requires Python 3.10 or later.
 
 ```powershell
 python -m pip install -r requirements.txt
-python -X utf8 -B "图案开口设计器/launch.py"
+python -X utf8 -B "Ohm Mask Designer/launch.py"
 ```
 
-Windows users can also double-click `图案开口设计器/启动设计器.cmd`. The designer starts a local service and opens `http://127.0.0.1:8765/`; AutoCAD is not required.
+Windows users can also double-click `Ohm Mask Designer/启动设计器.cmd`. The designer starts a local service and opens `http://127.0.0.1:8765/`; AutoCAD is not required.
 
 ## Tests
 
 ```powershell
-python -X utf8 -B -m unittest discover -s "图案开口设计器" -p "test_*.py"
+python -X utf8 -B -m unittest discover -s "Ohm Mask Designer" -p "test_*.py"
 python -X utf8 -B -m unittest discover -s "ohm-mask-skill/tests" -p "test_*.py"
 ```
 
 ## Layout
 
-- `图案开口设计器/`: browser GUI, project management, statistics, validation, and manufacturing export.
+- `Ohm Mask Designer/`: browser GUI, project management, statistics, validation, and manufacturing export.
 - `ohm-mask-skill/`: Codex Skill, geometry-generation scripts, format specification, and examples.
 - `默认25mm基底/`: reproducible example project configuration.
 
-See [`图案开口设计器/使用说明.md`](图案开口设计器/使用说明.md) for detailed usage.
+See [`Ohm Mask Designer/使用说明.md`](<Ohm Mask Designer/使用说明.md>) for detailed usage.
 
 ## Credits
 

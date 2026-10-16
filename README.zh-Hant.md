@@ -48,25 +48,25 @@ Windows 便攜版：[下載最新版本](https://github.com/littleBlack2003/ohm-
 
 ```powershell
 python -m pip install -r requirements.txt
-python -X utf8 -B "图案开口设计器/launch.py"
+python -X utf8 -B "Ohm Mask Designer/launch.py"
 ```
 
-Windows 用戶也可以雙擊 `图案开口设计器/启动设计器.cmd`。設計器會在本機啟動服務並打開 `http://127.0.0.1:8765/`，不需要 AutoCAD。
+Windows 用戶也可以雙擊 `Ohm Mask Designer/启动设计器.cmd`。設計器會在本機啟動服務並打開 `http://127.0.0.1:8765/`，不需要 AutoCAD。
 
 ## 測試
 
 ```powershell
-python -X utf8 -B -m unittest discover -s "图案开口设计器" -p "test_*.py"
+python -X utf8 -B -m unittest discover -s "Ohm Mask Designer" -p "test_*.py"
 python -X utf8 -B -m unittest discover -s "ohm-mask-skill/tests" -p "test_*.py"
 ```
 
 ## 目錄
 
-- `图案开口设计器/`：瀏覽器 GUI、項目管理、統計、校驗和加工導出。
+- `Ohm Mask Designer/`：瀏覽器 GUI、項目管理、統計、校驗和加工導出。
 - `ohm-mask-skill/`：Codex Skill、幾何生成腳本、格式規範和示例。
 - `默认25mm基底/`：可復現的示例項目配置。
 
-詳細使用方法見 [`图案开口设计器/使用说明.md`](图案开口设计器/使用说明.md)。
+詳細使用方法見 [`Ohm Mask Designer/使用说明.md`](<Ohm Mask Designer/使用说明.md>)。
 
 ## 貢獻致謝
 

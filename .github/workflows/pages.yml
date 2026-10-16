@@ -26,17 +26,17 @@ jobs:
         shell: bash
         run: |
           mkdir -p _site
-          cp "图案开口设计器/index.html" _site/
-          cp "图案开口设计器/project-ui.js" _site/
-          cp "图案开口设计器/canvas-controls.js" _site/
-          cp "图案开口设计器/static-api.js" _site/
-          cp "图案开口设计器/pyodide.js" _site/
-          cp "图案开口设计器/i18n.js" _site/
-          cp "图案开口设计器/web_bridge.py" _site/
-          cp "图案开口设计器/loc.py" _site/
-          cp "图案开口设计器/manufacturing.py" _site/
-          cp "图案开口设计器/area_statistics.py" _site/
-          cp "图案开口设计器/default_project.json" _site/
+          cp "Ohm Mask Designer/index.html" _site/
+          cp "Ohm Mask Designer/project-ui.js" _site/
+          cp "Ohm Mask Designer/canvas-controls.js" _site/
+          cp "Ohm Mask Designer/static-api.js" _site/
+          cp "Ohm Mask Designer/pyodide.js" _site/
+          cp "Ohm Mask Designer/i18n.js" _site/
+          cp "Ohm Mask Designer/web_bridge.py" _site/
+          cp "Ohm Mask Designer/loc.py" _site/
+          cp "Ohm Mask Designer/manufacturing.py" _site/
+          cp "Ohm Mask Designer/area_statistics.py" _site/
+          cp "Ohm Mask Designer/default_project.json" _site/
           cp "ohm-mask-skill/scripts/make_mask.py" _site/
           cp LICENSE _site/LICENSE.txt
           cp NOTICE _site/NOTICE.txt
